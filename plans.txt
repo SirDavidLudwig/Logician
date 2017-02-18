@@ -1,0 +1,6 @@
+Tools:
+	Select
+	Pan
+	Zoom
+	Nudge
+	Wire
