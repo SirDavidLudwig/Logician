@@ -1,3 +1,36 @@
+Menu Bar:
+	File:
+		New
+		Open
+		Open Recent >
+		-----------
+		Save
+		Save As...
+		Save All
+		-----------
+		Preferences
+		-----------
+		Import...
+		Export...
+		-----------
+		Close File
+		Revert File
+		Close All Files
+		-----------
+		Exit
+	Edit:
+		Undo
+		Redo
+	View:
+		Show Grid
+	Tools:
+		...
+	Window:
+		New Window
+		Close Window
+	Help:
+		About
+
 Tools:
 	Select
 	Pan

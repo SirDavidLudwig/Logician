@@ -1,5 +1,17 @@
 <RCC>
     <qresource prefix="/">
         <file>stylesheets/dark.css</file>
+        <file>svg/mouse-pointer.svg</file>
+        <file>svg/file.svg</file>
+        <file>svg/folder-open.svg</file>
+        <file>svg/save.svg</file>
+        <file>svg/file-o.svg</file>
+        <file>svg/folder-open-o.svg</file>
+        <file>svg/hand-paper-o.svg</file>
+        <file>svg/search.svg</file>
+        <file>svg/search-minus.svg</file>
+        <file>svg/search-plus.svg</file>
+        <file>svg/times.svg</file>
+        <file>png/times.png</file>
     </qresource>
 </RCC>

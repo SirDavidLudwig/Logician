@@ -1,11 +1,12 @@
-/*
-QMenu {
 
+QMainWindow {
+	background: #2e2e2e;
 }
 
 QMenuBar {
-	color: #ddd;
-	background: #4c4c4c;
+	color: #b6b6b6;
+	background: #3b3b3b;
+	border: 0;
 }
 
 QMenuBar::item {
@@ -13,7 +14,50 @@ QMenuBar::item {
 }
 
 QMenuBar::item:selected {
-	color: black;
-	background: white;
+	color: #b6b6b6;
+	background: #3b3b3b;
 }
-*/
+
+QTabWidget::pane {
+	background: #2e2e2e;
+	border: 1px solid #9b9b9b;
+}
+
+QTabBar {
+	width: 100%;
+}
+
+QTabBar::tab {
+	background: transparent;
+	color: #b6b6b6;
+	padding: 8px 10px;
+	min-width: 100px;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	margin-bottom: 2px;
+}
+
+QTabBar::tab:selected {
+	color: #117779;
+	border-color: #117779;
+}
+
+QToolBar {
+	border: 0;
+	background: #2e2e2e;
+}
+
+
+QToolBar QToolButton {
+	background: transparent;
+	border: none;
+	padding: 8px;
+}
+
+QToolBar QToolButton:hover {
+	background: #666;
+}
+
+#CircuitView {
+	background: #262626;
+}

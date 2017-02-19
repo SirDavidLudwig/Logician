@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "../widgets/mainwindowmenubar.h"
+#include "../widgets/mainwindowtoolbar.h"
 #include "../widgets/mainwindowui.h"
 
 class MainWindow : public QMainWindow
@@ -13,6 +14,7 @@ public:
 
 private:
     MainWindowMenuBar *menuBar_;
+    MainWindowToolBar *toolBar_;
     MainWindowUi *ui_;
 
 signals:

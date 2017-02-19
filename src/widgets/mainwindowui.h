@@ -1,9 +1,12 @@
 #ifndef MAINWINDOWUI_H
 #define MAINWINDOWUI_H
 
+#include <QTabWidget>
 #include <QWidget>
 
-class MainWindowUi : public QWidget
+#include "circuitview.h"
+
+class MainWindowUi : public QTabWidget
 {
     Q_OBJECT
 public:

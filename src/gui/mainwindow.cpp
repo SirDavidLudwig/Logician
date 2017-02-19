@@ -3,9 +3,12 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    menuBar_ = new MainWindowMenuBar();
+    menuBar_ = new MainWindowMenuBar(this);
     setMenuBar(menuBar_);
 
-    ui_ = new MainWindowUi();
+    toolBar_ = new MainWindowToolBar(this);
+    addToolBar(Qt::LeftToolBarArea, toolBar_);
+
+    ui_ = new MainWindowUi(this);
     setCentralWidget(ui_);
 }
