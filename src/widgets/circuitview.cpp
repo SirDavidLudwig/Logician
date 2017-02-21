@@ -12,7 +12,6 @@ CircuitView::CircuitView(QWidget *parent) :
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
     mousePos_ = QPointF(float(event->pos().x()) / width(), float(event->pos().y()) / height());
-    update();
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
@@ -35,6 +34,13 @@ void CircuitView::paintEvent(QPaintEvent *event)
     drawGrid(event, painter);
 
     QPen pen = painter.pen();
+    pen.setColor(Qt::red);
+    pen.setWidth(1);
+    painter.setPen(pen);
+
+    painter.drawPoint(width()/2, 10);
+
+    pen = painter.pen();
     pen.setColor(Qt::white);
     pen.setWidth(10);
     painter.setPen(pen);
@@ -68,11 +74,13 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     double x = fmod(width()/2, pixelsPerUnit());
     double y = fmod(height()/2, pixelsPerUnit());
 
-    for (x; x < width(); x += pixelsPerUnit())
-        painter.drawLine(floor(x), 0, floor(x), height());
+    for (x; x < width(); x += pixelsPerUnit()) {
+        painter.drawLine(round(x), 0, round(x), height());
+    }
 
-    for (y; y < height(); y += pixelsPerUnit())
-        painter.drawLine(0, floor(y), width(), floor(y));
+    for (y; y < height(); y += pixelsPerUnit()) {
+        painter.drawLine(0, round(y), width(), round(y));
+    }
 }
 
 QPointF CircuitView::mapToCoordinate(QPointF point) { return mapToCoordinate(point.x(), point.y()); }
