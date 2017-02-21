@@ -57,15 +57,17 @@ void CircuitView::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     painter.setPen(QColor("#404040"));
+    int x = (int)(width()/2 + position().x()*zoom()) % (int)zoom();
+    int y = (int)(height()/2 + position().y()*zoom()) % (int)zoom();
 
-//    for (int x = (width()/2 % (int)zoom()); x < width(); x += zoom())
-//        painter.drawLine(x, 0, x, height());
+    for (x; x < width(); x += zoom())
+        painter.drawLine(x, 0, x, height());
 
-//    for (int y = (height()/2 % (int)zoom()); y < height(); y += zoom())
-//        painter.drawLine(0, y, width(), y);
+    for (y; y < height(); y += zoom())
+        painter.drawLine(0, y, width(), y);
 
-    painter.drawLine(width()/2 + position_.x() * zoom(), 0, width()/2 + position_.x() * zoom(), height());
-    painter.drawLine(0, height()/2 + position_.y() * zoom(), width(), height()/2 + position_.y() * zoom());
+    //painter.drawLine(width()/2 + position_.x() * zoom(), 0, width()/2 + position_.x() * zoom(), height());
+    //painter.drawLine(0, height()/2 + position_.y() * zoom(), width(), height()/2 + position_.y() * zoom());
 
     if (abs(goalZoom_ - zoom_) > 0.001)
         update();
