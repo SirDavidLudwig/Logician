@@ -10,7 +10,8 @@ HEADERS += \
     src/widgets/mainwindowmenubar.h \
     src/utils/iconloader.h \
     src/widgets/mainwindowtoolbar.h \
-    src/widgets/circuitview.h
+    src/widgets/circuitview.h \
+    src/widgets/assetbrowser.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -20,7 +21,8 @@ SOURCES += \
     src/widgets/mainwindowmenubar.cpp \
     src/utils/iconloader.cpp \
     src/widgets/mainwindowtoolbar.cpp \
-    src/widgets/circuitview.cpp
+    src/widgets/circuitview.cpp \
+    src/widgets/assetbrowser.cpp
 
 RESOURCES += \
     resources/resources.qrc

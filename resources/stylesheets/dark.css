@@ -38,8 +38,8 @@ QTabBar::tab {
 }
 
 QTabBar::tab:selected {
-	color: #117779;
-	border-color: #117779;
+	color: #e64c3c;
+	border-color: #e64c3c;
 }
 
 QToolBar {
@@ -56,6 +56,19 @@ QToolBar QToolButton {
 
 QToolBar QToolButton:hover {
 	background: #666;
+}
+
+#AssetBrowser {
+	background: #2e2e2e;
+}
+
+#AssetBrowser QTabWidget::pane {
+	background: #2e2e2e;
+	border: 0;
+}
+
+#AssetBrowser QTabBar::tab {
+	min-width: 0;
 }
 
 #CircuitView {

@@ -11,7 +11,7 @@
         <file>svg/search.svg</file>
         <file>svg/search-minus.svg</file>
         <file>svg/search-plus.svg</file>
-        <file>svg/times.svg</file>
-        <file>png/times.png</file>
+        <file>png/gates.png</file>
+        <file>png/gates_accent.png</file>
     </qresource>
 </RCC>

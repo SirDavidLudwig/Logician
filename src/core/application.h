@@ -2,6 +2,7 @@
 #define APPLICATION_H
 
 #include <QApplication>
+#include <QDebug>
 #include <QFile>
 #include <QIODevice>
 #include <QObject>

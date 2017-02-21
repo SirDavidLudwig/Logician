@@ -3,6 +3,9 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
+    browser_ = new AssetBrowser(this);
+    addDockWidget(Qt::RightDockWidgetArea, browser_);
+
     menuBar_ = new MainWindowMenuBar(this);
     setMenuBar(menuBar_);
 
