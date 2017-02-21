@@ -10,6 +10,7 @@
 #include <QPaintEvent>
 #include <QPoint>
 #include <QPointF>
+#include <QResizeEvent>
 #include <QWheelEvent>
 #include <QWidget>
 
@@ -22,35 +23,36 @@ public:
 
     CircuitView(QWidget *parent = 0);
 
-    QPointF map(QPoint position);
-    QPointF map(QPointF position);
-    QPointF map(int x, int y);
+    QPointF mapToCoordinate(QPointF point);
+    QPointF mapToCoordinate(double x, double y);
 
-    QPointF position();
-    int zoom();
+    QPoint toPixels(QPointF point);
+    QPoint toPixels(double x, double y);
+
+    double pixelsPerUnit();
+    double zoom();
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void wheelEvent(QWheelEvent *event);
     void paintEvent(QPaintEvent *event);
+    void resizeEvent(QResizeEvent *event);
+    void wheelEvent(QWheelEvent *event);
+
+    void drawGrid(QPaintEvent *event, QPainter &painter);
 
 private:
+    QPointF mousePos_;
+    double pixelsPerUnit_;
 
-    QPoint mousePos_;
-    QPointF dragLastPoint_;
-    QPointF position_;
-    double goalZoom_;
     double zoom_;
 
 signals:
 
 public slots:
-    void setPosition(QPoint point);
-    void setPosition(QPointF point);
-    void setZoom(int zoom);
+    void updatePixelsPerUnit();
+    void setZoom(double zoom);
 };
 
 #endif // CIRCUITVIEW_H

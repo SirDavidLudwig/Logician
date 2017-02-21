@@ -1,101 +1,100 @@
 #include "circuitview.h"
 
-CircuitView::CircuitView(QWidget *parent) : QWidget(parent)
+CircuitView::CircuitView(QWidget *parent) :
+    QWidget(parent)
 {
-    goalZoom_ = 10;
-    zoom_ = 10;
+    setMouseTracking(true);
 
-    setObjectName("CircuitView");
-}
-
-void CircuitView::contextMenuEvent(QContextMenuEvent *event)
-{
-    this->QWidget::contextMenuEvent(event);
+    pixelsPerUnit_ = 1;
+    zoom_ = MIN_ZOOM;
 }
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
-    mousePos_ = event->pos();
-
-    if (event->buttons() & Qt::MiddleButton)
-    {
-        QPointF pos(position().x(), position().y());
-        pos += map(event->pos()) - dragLastPoint_;
-        qDebug() << dragLastPoint_;
-        setPosition(pos);
-        dragLastPoint_ = map(event->pos());
-    }
-
-    this->QWidget::mouseMoveEvent(event);
+    mousePos_ = QPointF(float(event->pos().x()) / width(), float(event->pos().y()) / height());
+    update();
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::MiddleButton)
-        dragLastPoint_ = map(event->pos());
 
-    this->QWidget::mousePressEvent(event);
 }
 
 void CircuitView::mouseReleaseEvent(QMouseEvent *event)
 {
-    this->QWidget::mouseReleaseEvent(event);
-}
 
-void CircuitView::wheelEvent(QWheelEvent *event)
-{
-    setZoom(goalZoom_ - goalZoom_ * event->delta() / -1200);
-    this->QWidget::wheelEvent(event);
 }
 
 void CircuitView::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(event);
-
-    zoom_ = goalZoom_;
-
     QPainter painter(this);
 
-    painter.setPen(QColor("#404040"));
-    int x = (int)(width()/2 + position().x()*zoom()) % (int)zoom();
-    int y = (int)(height()/2 + position().y()*zoom()) % (int)zoom();
+    QFont font("Tahoma", 15);
+    painter.setFont(font);
 
-    for (x; x < width(); x += zoom())
-        painter.drawLine(x, 0, x, height());
+    drawGrid(event, painter);
 
-    for (y; y < height(); y += zoom())
-        painter.drawLine(0, y, width(), y);
+    QPen pen = painter.pen();
+    pen.setColor(Qt::white);
+    pen.setWidth(10);
+    painter.setPen(pen);
 
-    //painter.drawLine(width()/2 + position_.x() * zoom(), 0, width()/2 + position_.x() * zoom(), height());
-    //painter.drawLine(0, height()/2 + position_.y() * zoom(), width(), height()/2 + position_.y() * zoom());
-
-    if (abs(goalZoom_ - zoom_) > 0.001)
-        update();
-
-    painter.setFont(QFont("Tahoma", 15));
-    painter.setPen(QColor("#bdbdbd"));
-    QPointF pos = map(mousePos_);
-    painter.drawText(QPoint(5, 20), "(" + QString::number(pos.x()) + ", " + QString::number(pos.y()) + ")" +
-                     QString::number(zoom()) + ", " +
-                     "(" + QString::number(position().x()) + ", " + QString::number(position().y()) + ")");
+    int line = 1;
+    QPointF coord = mapToCoordinate(mousePos_);
+    painter.drawText(QPoint(5, 20*line++), "Pixels per unit: " + QString::number(pixelsPerUnit()));
+    painter.drawText(QPoint(5, 20*line++), "Mouse Pos(" + QString::number(mousePos_.x()) + ", " + QString::number(mousePos_.y()) + ")");
+    painter.drawText(QPoint(5, 20*line++), "Coordinate(" + QString::number(coord.x()) + ", " + QString::number(coord.y()) + ")");
+    painter.drawText(QPoint(5, 20*line++), "Zoom: " + QString::number(zoom()));
 }
 
-QPointF CircuitView::map(QPointF position) { return map(position.x(), position.y()); }
-QPointF CircuitView::map(QPoint position) { return map(position.x(), position.y()); }
-QPointF CircuitView::map(int x, int y)
+void CircuitView::resizeEvent(QResizeEvent *event)
 {
+    updatePixelsPerUnit();
+}
+
+void CircuitView::wheelEvent(QWheelEvent *event)
+{
+    setZoom(zoom() - zoom() * event->delta() / -1200);
+    this->QWidget::wheelEvent(event);
+}
+
+void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
+{
+    QPen pen = painter.pen();
+    pen.setColor(QColor("#404040"));
+    pen.setWidth(1);
+    painter.setPen(pen);
+
+    double x = fmod(width()/2, pixelsPerUnit());
+    double y = fmod(height()/2, pixelsPerUnit());
+
+    for (x; x < width(); x += pixelsPerUnit())
+        painter.drawLine(floor(x), 0, floor(x), height());
+
+    for (y; y < height(); y += pixelsPerUnit())
+        painter.drawLine(0, floor(y), width(), floor(y));
+}
+
+QPointF CircuitView::mapToCoordinate(QPointF point) { return mapToCoordinate(point.x(), point.y()); }
+QPointF CircuitView::mapToCoordinate(double x, double y)
+{
+    QPoint pixelPos = toPixels(x - 0.5, y - 0.5);
     QPointF pos;
-
-    pos.setX((x - width()/2) / goalZoom_);
-    pos.setY((y - height()/2) / goalZoom_);
-
+    pos.setX(float(pixelPos.x()) / pixelsPerUnit());
+    pos.setY(float(pixelPos.y()) / pixelsPerUnit());
     return pos;
 }
 
-QPointF CircuitView::position() { return position_; }
-int CircuitView::zoom() { return zoom_; }
+QPoint CircuitView::toPixels(QPointF point) { return toPixels(point.x(), point.y()); }
+QPoint CircuitView::toPixels(double x, double y)
+{
+    return QPoint(x*width(), y*height());
+}
 
-void CircuitView::setPosition(QPoint position) { setPosition(QPointF(position.x(), position.y())); }
-void CircuitView::setPosition(QPointF position) { position_ = position; update(); }
-void CircuitView::setZoom(int zoom) { goalZoom_ = qMax(MIN_ZOOM, qMin(zoom, MAX_ZOOM)); update(); }
+double CircuitView::pixelsPerUnit() { return pixelsPerUnit_; }
+
+double CircuitView::zoom() { return zoom_; }
+void CircuitView::setZoom(double zoom) { zoom_ = qMin<double>(MAX_ZOOM, qMax<double>(MIN_ZOOM, zoom)); updatePixelsPerUnit(); update(); }
+
+void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<float>(width(), height()) / MIN_ZOOM * zoom() / MAX_ZOOM; }
 
