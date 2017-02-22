@@ -29,6 +29,8 @@ public:
 
     CircuitView(QWidget *parent = 0, int id = 0);
 
+    double dmod(double x, double y);
+
     QPointF mapToCoordinate(QPointF point);
     QPointF mapToCoordinate(double x, double y);
 

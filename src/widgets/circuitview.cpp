@@ -17,7 +17,7 @@ bool CircuitView::event(QEvent *event)
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF newPos(float(event->pos().x()) / width(), float(event->pos().y()) / height());
+    QPointF newPos(double(event->pos().x()) / width(), double(event->pos().y()) / height());
     if (event->buttons() & Qt::MiddleButton) {
         setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newPos));
     }
@@ -31,17 +31,17 @@ void CircuitView::mousePressEvent(QMouseEvent *event)
         dragging_ = true;
         setPositionVelocity(0, 0);
     }
-    mousePos_.setX(float(event->pos().x()) / width());
-    mousePos_.setY(float(event->pos().y()) / height());
+    mousePos_.setX(double(event->pos().x()) / width());
+    mousePos_.setY(double(event->pos().y()) / height());
 }
 
 void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the last move event to get the velocity
 {
     if (event->button() == Qt::MiddleButton) {
         dragging_ = false;
-        QPointF newPos(float(event->pos().x()) / width(), float(event->pos().y()) / height());
-        mousePos_.setX(float(event->pos().x()) / width());
-        mousePos_.setY(float(event->pos().y()) / height());
+        QPointF newPos(double(event->pos().x()) / width(), double(event->pos().y()) / height());
+        mousePos_.setX(double(event->pos().x()) / width());
+        mousePos_.setY(double(event->pos().y()) / height());
     }
 }
 
@@ -96,15 +96,8 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     pen.setWidth(1);
     painter.setPen(pen);
 
-    qDebug() << width();
-
-    double x = fmod(double(width()/2.0) - pixelsPerUnit()*position().x(), pixelsPerUnit());
-    double y = fmod(double(height()/2.0) - pixelsPerUnit()*position().y(), pixelsPerUnit());
-
-    std::cout.precision(17);
-    std::cout << (width() / 100.0) << std::endl;
-    std::cout << (width()/2.0) << "; " << x << "; " << pixelsPerUnit() << "; " << (x == pixelsPerUnit()) << std::endl;
-
+    double x = dmod(double(width()/2.0) - pixelsPerUnit()*position().x(), pixelsPerUnit());
+    double y = dmod(double(height()/2.0) - pixelsPerUnit()*position().y(), pixelsPerUnit());
     for (x; x < width(); x += pixelsPerUnit()) {
         painter.drawLine(round(x), 0, round(x), height());
     }
@@ -119,8 +112,8 @@ QPointF CircuitView::mapToCoordinate(double x, double y)
 {
     QPoint pixelPos = toPixels(x - 0.5, y - 0.5);
     QPointF pos;
-    pos.setX(float(pixelPos.x()) / pixelsPerUnit() + position().x());
-    pos.setY(float(pixelPos.y()) / pixelsPerUnit() + position().y());
+    pos.setX(double(pixelPos.x()) / pixelsPerUnit() + position().x());
+    pos.setY(double(pixelPos.y()) / pixelsPerUnit() + position().y());
     return pos;
 }
 
@@ -129,6 +122,9 @@ QPoint CircuitView::toPixels(double x, double y)
 {
     return QPoint(x*width(), y*height());
 }
+
+// fmod was returning broken results...
+double CircuitView::dmod(double x, double y) { return x - floor(x/y)*y; }
 
 void CircuitView::translate(double x, double y, bool update) { translate(QPointF(x, y), update); }
 void CircuitView::translate(QPointF position, bool update) { position_ += position; if(update) this->update(); }
