@@ -55,7 +55,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
     } else {
         if (sqrt(pow(positionVelocity().x(), 2) + pow(positionVelocity().y(), 2)) > 0.001) {
             translate(positionVelocity(), true);
-            setPositionVelocity(positionVelocity() - positionVelocity() * 0.1);
+            setPositionVelocity(positionVelocity() - positionVelocity() * MIN_ZOOM * 0.45 / zoom());
         }
     }
 
