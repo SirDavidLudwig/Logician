@@ -12,9 +12,14 @@ class MainWindowUi : public QTabWidget
 public:
     MainWindowUi(QWidget *parent = 0);
 
+private:
+    int lastTab_;
+
 signals:
 
 public slots:
+    void onTabChange(int index);
+    void tabInserted(int index);
 };
 
 #endif // MAINWINDOWUI_H

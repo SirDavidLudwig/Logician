@@ -1,41 +1,63 @@
 #include "circuitview.h"
 
-CircuitView::CircuitView(QWidget *parent) :
+CircuitView::CircuitView(QWidget *parent, int id) :
     QWidget(parent)
 {
-    setMouseTracking(true);
-
+    setMouseTracking(false);
+    id_ = id;
+    active_ = false;
     pixelsPerUnit_ = 1;
     zoom_ = MIN_ZOOM;
 }
 
+bool CircuitView::event(QEvent *event)
+{
+    return this->QWidget::event(event);
+}
+
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
-
     QPointF newPos(float(event->pos().x()) / width(), float(event->pos().y()) / height());
     if (event->buttons() & Qt::MiddleButton) {
-        translate(mapToCoordinate(mousePos_) - mapToCoordinate(newPos));
+        setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newPos));
     }
-
     mousePos_ = newPos;
-
-    // Sometimes redundent
     update();
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
 {
-
+    if (event->button() == Qt::MiddleButton) {
+        dragging_ = true;
+        setPositionVelocity(0, 0);
+    }
+    mousePos_.setX(float(event->pos().x()) / width());
+    mousePos_.setY(float(event->pos().y()) / height());
 }
 
-void CircuitView::mouseReleaseEvent(QMouseEvent *event)
+void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the last move event to get the velocity
 {
-
+    if (event->button() == Qt::MiddleButton) {
+        dragging_ = false;
+        QPointF newPos(float(event->pos().x()) / width(), float(event->pos().y()) / height());
+        mousePos_.setX(float(event->pos().x()) / width());
+        mousePos_.setY(float(event->pos().y()) / height());
+    }
 }
 
 void CircuitView::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+
+    if (dragging_) {
+        translate(positionVelocity(), false);
+        setPositionVelocity(0, 0);
+    } else {
+        if (sqrt(pow(positionVelocity().x(), 2) + pow(positionVelocity().y(), 2)) > 0.001) {
+            translate(positionVelocity(), true);
+            setPositionVelocity(positionVelocity() - positionVelocity() * 0.1);
+        }
+    }
 
     QFont font("Tahoma", 15);
     painter.setFont(font);
@@ -50,10 +72,10 @@ void CircuitView::paintEvent(QPaintEvent *event)
     int line = 1;
     QPointF coord = mapToCoordinate(mousePos_);
     painter.drawText(QPoint(5, 20*line++), "Pixels per unit: " + QString::number(pixelsPerUnit()));
-    painter.drawText(QPoint(5, 20*line++), "Mouse Pos(" + QString::number(mousePos_.x()) + ", " + QString::number(mousePos_.y()) + ")");
-    painter.drawText(QPoint(5, 20*line++), "Coordinate(" + QString::number(coord.x()) + ", " + QString::number(coord.y()) + ")");
     painter.drawText(QPoint(5, 20*line++), "Position(" + QString::number(position().x()) + ", " + QString::number(position().y()) + ")");
     painter.drawText(QPoint(5, 20*line++), "Zoom: " + QString::number(zoom()));
+
+
 }
 
 void CircuitView::resizeEvent(QResizeEvent *event)
@@ -102,8 +124,8 @@ QPoint CircuitView::toPixels(double x, double y)
     return QPoint(x*width(), y*height());
 }
 
-void CircuitView::translate(double x, double y) { translate(QPointF(x, y)); }
-void CircuitView::translate(QPointF position) { position_ += position; update(); }
+void CircuitView::translate(double x, double y, bool update) { translate(QPointF(x, y), update); }
+void CircuitView::translate(QPointF position, bool update) { position_ += position; if(update) this->update(); }
 
 double CircuitView::pixelsPerUnit() { return pixelsPerUnit_; }
 void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<float>(width(), height()) / MIN_ZOOM * zoom() / MAX_ZOOM; }
@@ -117,7 +139,15 @@ void CircuitView::setPosition(double x, double y)
     update();
 }
 
+QPointF CircuitView::positionVelocity() { return positionVelocity_; }
+void CircuitView::setPositionVelocity(QPointF velocity) { setPositionVelocity(velocity.x(), velocity.y()); }
+void CircuitView::setPositionVelocity(double x, double y)
+{
+    positionVelocity_.setX(x);
+    positionVelocity_.setY(y);
+}
+
 double CircuitView::zoom() { return zoom_; }
 void CircuitView::setZoom(double zoom) { zoom_ = qMin<double>(MAX_ZOOM, qMax<double>(MIN_ZOOM, zoom)); updatePixelsPerUnit(); update(); }
 
-
+void CircuitView::setActive(bool active) { active_ = active; }
