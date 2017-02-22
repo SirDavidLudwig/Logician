@@ -96,8 +96,14 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     pen.setWidth(1);
     painter.setPen(pen);
 
-    double x = fmod(width()/2 - pixelsPerUnit()*position().x(), pixelsPerUnit());
-    double y = fmod(height()/2 - pixelsPerUnit()*position().y(), pixelsPerUnit());
+    qDebug() << width();
+
+    double x = fmod(double(width()/2.0) - pixelsPerUnit()*position().x(), pixelsPerUnit());
+    double y = fmod(double(height()/2.0) - pixelsPerUnit()*position().y(), pixelsPerUnit());
+
+    std::cout.precision(17);
+    std::cout << (width() / 100.0) << std::endl;
+    std::cout << (width()/2.0) << "; " << x << "; " << pixelsPerUnit() << "; " << (x == pixelsPerUnit()) << std::endl;
 
     for (x; x < width(); x += pixelsPerUnit()) {
         painter.drawLine(round(x), 0, round(x), height());
@@ -128,7 +134,7 @@ void CircuitView::translate(double x, double y, bool update) { translate(QPointF
 void CircuitView::translate(QPointF position, bool update) { position_ += position; if(update) this->update(); }
 
 double CircuitView::pixelsPerUnit() { return pixelsPerUnit_; }
-void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<float>(width(), height()) / MIN_ZOOM * zoom() / MAX_ZOOM; }
+void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<double>(width(), height()) / MIN_ZOOM * zoom()/ MAX_ZOOM; }
 
 QPointF CircuitView::position() { return position_; }
 void CircuitView::setPosition(QPointF position) { setPosition(position.x(), position.y()); }

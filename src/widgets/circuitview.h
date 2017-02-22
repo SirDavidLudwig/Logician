@@ -1,6 +1,9 @@
 #ifndef CIRCUITVIEW_H
 #define CIRCUITVIEW_H
 
+#include <iostream>
+#include <stdio.h>
+
 #include <QBrush>
 #include <QContextMenuEvent>
 #include <QDebug>
