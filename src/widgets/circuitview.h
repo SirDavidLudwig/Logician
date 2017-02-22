@@ -30,6 +30,7 @@ public:
     QPoint toPixels(double x, double y);
 
     double pixelsPerUnit();
+    QPointF position();
     double zoom();
 
 protected:
@@ -43,6 +44,7 @@ protected:
     void drawGrid(QPaintEvent *event, QPainter &painter);
 
 private:
+    QPointF position_;
     QPointF mousePos_;
     double pixelsPerUnit_;
 
@@ -51,6 +53,10 @@ private:
 signals:
 
 public slots:
+    void translate(QPointF position);
+    void translate(double x, double y);
+    void setPosition(QPointF position);
+    void setPosition(double x, double y);
     void updatePixelsPerUnit();
     void setZoom(double zoom);
 };
