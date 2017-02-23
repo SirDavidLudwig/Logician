@@ -8,10 +8,13 @@
 #include <QContextMenuEvent>
 #include <QDebug>
 #include <QEvent>
+#include <QGesture>
+#include <QGestureEvent>
 #include <QMouseEvent>
 #include <QObject>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPanGesture>
 #include <QPoint>
 #include <QPointF>
 #include <QResizeEvent>
@@ -31,8 +34,15 @@ public:
 
     double dmod(double x, double y);
 
+    QPointF mapFromCoordinate(QPointF point);
+    QPointF mapFromCoordinate(double x, double y);
+
     QPointF mapToCoordinate(QPointF point);
     QPointF mapToCoordinate(double x, double y);
+
+    QPointF toScreen(QPoint point);
+    QPointF toScreen(QPointF point);
+    QPointF toScreen(double x, double y);
 
     QPoint toPixels(QPointF point);
     QPoint toPixels(double x, double y);
@@ -52,11 +62,14 @@ protected:
     void wheelEvent(QWheelEvent *event);
 
     void drawGrid(QPaintEvent *event, QPainter &painter);
+    void drag();
 
 private:
     int id_;
     bool active_;
+    bool touchDragging_;
     bool dragging_;
+    QPointF lastPositionVelocity_;
     QPointF positionVelocity_;
     QPointF position_;
     QPointF mousePos_;

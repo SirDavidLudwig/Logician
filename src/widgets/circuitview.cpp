@@ -3,31 +3,75 @@
 CircuitView::CircuitView(QWidget *parent, int id) :
     QWidget(parent)
 {
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::TapGesture);
     setMouseTracking(false);
     id_ = id;
     active_ = false;
+    dragging_ = false;
+    touchDragging_ = false;
     pixelsPerUnit_ = 1;
     zoom_ = MIN_ZOOM;
 }
 
 bool CircuitView::event(QEvent *event)
 {
-    return this->QWidget::event(event);
+    if (event->type() == QEvent::TouchBegin ||
+        event->type() == QEvent::TouchUpdate ||
+        event->type() == QEvent::TouchEnd ||
+        event->type() == QEvent::TouchCancel)
+    {
+        QTouchEvent *touch = (QTouchEvent*) event;
+        if (touch->touchPoints().length() == 2) {
+            touchDragging_ = true;
+            QTouchEvent::TouchPoint pointA = touch->touchPoints()[0];
+            QTouchEvent::TouchPoint pointB = touch->touchPoints()[1];
+
+            QPointF lastHotSpot = toScreen(pointA.lastPos() + pointB.lastPos()) / 2;
+            QPointF newHotSpot = toScreen(pointA.pos() + pointB.pos()) / 2;
+            mousePos_ = lastHotSpot;
+
+            QPointF lastA = (toScreen(pointA.lastPos()));
+            QPointF lastB = (toScreen(pointB.lastPos()));
+
+            QPointF newA = (toScreen(pointA.pos()));
+            QPointF newB = (toScreen(pointB.pos()));
+
+            qDebug() << mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot);
+
+            if (pointA.state() != Qt::TouchPointReleased && pointB.state() != Qt::TouchPointReleased) {
+                setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot));
+                mousePos_ = newHotSpot;
+                repaint();
+            } else {
+                touchDragging_ = false;
+                qDebug() << "Set last" << lastPositionVelocity_;
+                setPositionVelocity(lastPositionVelocity_);
+                mousePos_.setX(newHotSpot.x());
+                mousePos_.setY(newHotSpot.y());
+                repaint();
+            }
+       } else {
+            touchDragging_ = false;
+       }
+    } else
+
+        return this->QWidget::event(event);
 }
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF newPos(double(event->pos().x()) / width(), double(event->pos().y()) / height());
-    if (event->buttons() & Qt::MiddleButton) {
+    QPointF newPos = toScreen(event->pos());
+    if (event->buttons() & Qt::RightButton) {
         setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newPos));
+        mousePos_ = newPos;
+        update();
     }
-    mousePos_ = newPos;
-    update();
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::MiddleButton) {
+    if (event->button() == Qt::RightButton) {
         dragging_ = true;
         setPositionVelocity(0, 0);
     }
@@ -37,9 +81,8 @@ void CircuitView::mousePressEvent(QMouseEvent *event)
 
 void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the last move event to get the velocity
 {
-    if (event->button() == Qt::MiddleButton) {
+    if (event->button() == Qt::RightButton) {
         dragging_ = false;
-        QPointF newPos(double(event->pos().x()) / width(), double(event->pos().y()) / height());
         mousePos_.setX(double(event->pos().x()) / width());
         mousePos_.setY(double(event->pos().y()) / height());
     }
@@ -49,7 +92,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    if (dragging_) {
+    if (dragging_ || touchDragging_) {
         translate(positionVelocity(), false);
         setPositionVelocity(0, 0);
     } else {
@@ -107,14 +150,33 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     }
 }
 
+void CircuitView::drag()
+{
+
+}
+
+QPointF CircuitView::mapFromCoordinate(QPointF point) { return mapFromCoordinate(point.x(), point.y()); }
+QPointF CircuitView::mapFromCoordinate(double x, double y)
+{
+    QPointF coord;
+    coord.setX((x - position().x()) * pixelsPerUnit() + 0.5);
+    coord.setY((y - position().y()) * pixelsPerUnit() + 0.5);
+    return coord;
+}
+
 QPointF CircuitView::mapToCoordinate(QPointF point) { return mapToCoordinate(point.x(), point.y()); }
 QPointF CircuitView::mapToCoordinate(double x, double y)
 {
-    QPoint pixelPos = toPixels(x - 0.5, y - 0.5);
     QPointF pos;
-    pos.setX(double(pixelPos.x()) / pixelsPerUnit() + position().x());
-    pos.setY(double(pixelPos.y()) / pixelsPerUnit() + position().y());
+    pos.setX((x - 0.5)*width() / pixelsPerUnit() + position().x());
+    pos.setY((y - 0.5)*height() / pixelsPerUnit() + position().y());
     return pos;
+}
+
+QPointF CircuitView::toScreen(QPoint point) { return toScreen(point.x(), point.y()); }
+QPointF CircuitView::toScreen(QPointF point) { return toScreen(point.x(), point.y()); }
+QPointF CircuitView::toScreen(double x, double y) {
+    return QPointF(x/width(), y/height());
 }
 
 QPoint CircuitView::toPixels(QPointF point) { return toPixels(point.x(), point.y()); }
@@ -130,7 +192,7 @@ void CircuitView::translate(double x, double y, bool update) { translate(QPointF
 void CircuitView::translate(QPointF position, bool update) { position_ += position; if(update) this->update(); }
 
 double CircuitView::pixelsPerUnit() { return pixelsPerUnit_; }
-void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<double>(width(), height()) / MIN_ZOOM * zoom()/ MAX_ZOOM; }
+void CircuitView::updatePixelsPerUnit() { pixelsPerUnit_ = qMax<double>(width(), height()) / MIN_ZOOM * zoom() / MAX_ZOOM; }
 
 QPointF CircuitView::position() { return position_; }
 void CircuitView::setPosition(QPointF position) { setPosition(position.x(), position.y()); }
@@ -145,6 +207,8 @@ QPointF CircuitView::positionVelocity() { return positionVelocity_; }
 void CircuitView::setPositionVelocity(QPointF velocity) { setPositionVelocity(velocity.x(), velocity.y()); }
 void CircuitView::setPositionVelocity(double x, double y)
 {
+    lastPositionVelocity_.setX(positionVelocity_.x());
+    lastPositionVelocity_.setY(positionVelocity_.y());
     positionVelocity_.setX(x);
     positionVelocity_.setY(y);
 }
