@@ -31,21 +31,19 @@ bool CircuitView::event(QEvent *event)
             QPointF newHotSpot = toScreen(pointA.pos() + pointB.pos()) / 2;
             mousePos_ = lastHotSpot;
 
-            QPointF lastA = (toScreen(pointA.lastPos()));
-            QPointF lastB = (toScreen(pointB.lastPos()));
+            QPointF lastA = toScreen(pointA.lastPos());
+            QPointF lastB = toScreen(pointB.lastPos());
 
-            QPointF newA = (toScreen(pointA.pos()));
-            QPointF newB = (toScreen(pointB.pos()));
-
-            qDebug() << mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot);
+            QPointF newA = toScreen(pointA.pos());
+            QPointF newB = toScreen(pointB.pos());
 
             if (pointA.state() != Qt::TouchPointReleased && pointB.state() != Qt::TouchPointReleased) {
+                setZoom(lastA, lastB, newA, newB, false);
                 setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot));
                 mousePos_ = newHotSpot;
                 repaint();
             } else {
                 touchDragging_ = false;
-                qDebug() << "Set last" << lastPositionVelocity_;
                 setPositionVelocity(lastPositionVelocity_);
                 mousePos_.setX(newHotSpot.x());
                 mousePos_.setY(newHotSpot.y());
@@ -128,7 +126,8 @@ void CircuitView::resizeEvent(QResizeEvent *event)
 
 void CircuitView::wheelEvent(QWheelEvent *event)
 {
-    setZoom(zoom() - zoom() * event->delta() / -1200);
+    int direction = event->angleDelta().y() / -abs(event->angleDelta().y());
+    setZoom(zoom() - zoom() * 0.1 * direction, toScreen(event->pos()));
     this->QWidget::wheelEvent(event);
 }
 
@@ -187,6 +186,8 @@ QPoint CircuitView::toPixels(double x, double y)
 
 // fmod was returning broken results...
 double CircuitView::dmod(double x, double y) { return x - floor(x/y)*y; }
+double CircuitView::magnitude(QPoint point) { return magnitude(QPointF(point.x(), point.y())); }
+double CircuitView::magnitude(QPointF point) { return sqrt(pow(point.x(), 2) + pow(point.y(), 2)); }
 
 void CircuitView::translate(double x, double y, bool update) { translate(QPointF(x, y), update); }
 void CircuitView::translate(QPointF position, bool update) { position_ += position; if(update) this->update(); }
@@ -214,6 +215,28 @@ void CircuitView::setPositionVelocity(double x, double y)
 }
 
 double CircuitView::zoom() { return zoom_; }
-void CircuitView::setZoom(double zoom) { zoom_ = qMin<double>(MAX_ZOOM, qMax<double>(MIN_ZOOM, zoom)); updatePixelsPerUnit(); update(); }
+void CircuitView::setZoom(double zoom, bool update) { setZoom(zoom, mapToCoordinate(QPointF(0.5, 0.5)), update); }
+void CircuitView::setZoom(double zoom, QPointF point, bool update)
+{
+    QPointF coord = mapToCoordinate(point);
+    zoom_ = qMin<double>(MAX_ZOOM, qMax<double>(MIN_ZOOM, zoom));
+    updatePixelsPerUnit();
+
+    setPosition(coord - QPointF(width()*(point.x()-0.5)/pixelsPerUnit(), height()*(point.y()-0.5)/pixelsPerUnit()));
+
+    if (update)
+        repaint();
+
+}
+void CircuitView::setZoom(QPointF pointAi, QPointF pointBi, QPointF pointAf, QPointF pointBf, bool update)
+{
+    QPointF hotSpot = (pointAf + pointBf)/2;
+
+    QPointF a(width()*(pointAi.x() - pointBi.x()), height()*(pointAi.y() - pointBi.y()));
+    QPointF b(width()*(pointAf.x() - pointBf.x()), height()*(pointAf.y() - pointBf.y()));
+
+    double newZoom = zoom() * magnitude(b) / magnitude(a);
+    setZoom(newZoom, hotSpot, update);
+}
 
 void CircuitView::setActive(bool active) { active_ = active; }

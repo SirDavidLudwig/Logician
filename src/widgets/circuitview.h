@@ -33,6 +33,8 @@ public:
     CircuitView(QWidget *parent = 0, int id = 0);
 
     double dmod(double x, double y);
+    double magnitude(QPoint point);
+    double magnitude(QPointF point);
 
     QPointF mapFromCoordinate(QPointF point);
     QPointF mapFromCoordinate(double x, double y);
@@ -86,7 +88,9 @@ public slots:
     void setPositionVelocity(QPointF velocity);
     void setPositionVelocity(double x, double y);
     void updatePixelsPerUnit();
-    void setZoom(double zoom);
+    void setZoom(double zoom, bool update = true);
+    void setZoom(double zoom, QPointF point, bool update = true);
+    void setZoom(QPointF pointAi, QPointF pointBi, QPointF pointAf, QPointF pointBf, bool update = true);
 
     void setActive(bool active);
 };
