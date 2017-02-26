@@ -11,7 +11,10 @@ HEADERS += \
     src/utils/iconloader.h \
     src/widgets/mainwindowtoolbar.h \
     src/widgets/circuitview.h \
-    src/widgets/assetbrowser.h
+    src/widgets/assetbrowser.h \
+    src/circuits/gates/logicgate.h \
+    src/circuits/circuit.h \
+    src/circuits/circuitentity.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -22,7 +25,10 @@ SOURCES += \
     src/utils/iconloader.cpp \
     src/widgets/mainwindowtoolbar.cpp \
     src/widgets/circuitview.cpp \
-    src/widgets/assetbrowser.cpp
+    src/widgets/assetbrowser.cpp \
+    src/circuits/gates/logicgate.cpp \
+    src/circuits/circuit.cpp \
+    src/circuits/circuitentity.cpp
 
 RESOURCES += \
     resources/resources.qrc
