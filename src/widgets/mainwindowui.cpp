@@ -6,10 +6,7 @@ MainWindowUi::MainWindowUi(QWidget *parent) :
     lastTab_ = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(onTabChange(int)));
 
-    addTab(new CircuitView(this, 0), "Untitled");
-    addTab(new CircuitView(this, 1), "Untitled");
-    addTab(new CircuitView(this, 2), "Untitled");
-    addTab(new CircuitView(this, 3), "Untitled");
+    addTab(new CircuitView(this, new Circuit()), "Untitled");
 }
 
 void MainWindowUi::onTabChange(int index)

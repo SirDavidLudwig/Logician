@@ -1,4 +1,4 @@
-QT += core gui svg widgets
+QT += core gui opengl svg widgets
 
 TARGET = Logician
 TEMPLATE = app
@@ -14,7 +14,10 @@ HEADERS += \
     src/widgets/assetbrowser.h \
     src/circuits/gates/logicgate.h \
     src/circuits/circuit.h \
-    src/circuits/circuitentity.h
+    src/circuits/inputs/inputpin.h \
+    src/circuits/outputs/outputpin.h \
+    src/circuits/circuitcomponent.h \
+    src/circuits/gates/andgate.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -28,7 +31,10 @@ SOURCES += \
     src/widgets/assetbrowser.cpp \
     src/circuits/gates/logicgate.cpp \
     src/circuits/circuit.cpp \
-    src/circuits/circuitentity.cpp
+    src/circuits/inputs/inputpin.cpp \
+    src/circuits/outputs/outputpin.cpp \
+    src/circuits/circuitcomponent.cpp \
+    src/circuits/gates/andgate.cpp
 
 RESOURCES += \
     resources/resources.qrc

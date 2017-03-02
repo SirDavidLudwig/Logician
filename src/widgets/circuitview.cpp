@@ -1,17 +1,17 @@
 #include "circuitview.h"
 
-CircuitView::CircuitView(QWidget *parent, int id) :
+CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     QWidget(parent)
 {
-    grabGesture(Qt::PanGesture);
-    grabGesture(Qt::TapGesture);
     setMouseTracking(false);
-    id_ = id;
     active_ = false;
+    circuit_ = NULL;
     dragging_ = false;
     touchDragging_ = false;
     pixelsPerUnit_ = 1;
     zoom_ = MIN_ZOOM;
+
+    setCircuit(circuit);
 }
 
 bool CircuitView::event(QEvent *event)
@@ -88,7 +88,9 @@ void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the la
 
 void CircuitView::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);
+    QPainter painter;
+
+    painter.begin(this);
 
     if (dragging_ || touchDragging_) {
         translate(positionVelocity(), false);
@@ -104,6 +106,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
     painter.setFont(font);
 
     drawGrid(event, painter);
+    drawComponents(event, painter);
 
     QPen pen = painter.pen();
     pen.setColor(Qt::white);
@@ -116,7 +119,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
     painter.drawText(QPoint(5, 20*line++), "Position(" + QString::number(position().x()) + ", " + QString::number(position().y()) + ")");
     painter.drawText(QPoint(5, 20*line++), "Zoom: " + QString::number(zoom()));
 
-
+    painter.end();
 }
 
 void CircuitView::resizeEvent(QResizeEvent *event)
@@ -149,17 +152,35 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     }
 }
 
-void CircuitView::drag()
+void CircuitView::drawComponents(QPaintEvent *event, QPainter &painter)
 {
+    painter.setRenderHint(QPainter::Antialiasing);
 
+    foreach(CircuitComponent *component, circuit()->components()) {
+        component->prepareDraw(position(), size(), pixelsPerUnit_);
+        component->draw(painter);
+    }
+}
+
+bool CircuitView::isActive() { return active_; }
+void CircuitView::setActive(bool active) { active_ = active; }
+
+Circuit* CircuitView::circuit() { return circuit_; }
+void CircuitView::setCircuit(Circuit* circuit)
+{
+    if (circuit != NULL) {
+        disconnect(circuit, SIGNAL(updated()), this, SLOT(repaint()));
+    }
+    circuit_ = circuit; update();
+    connect(circuit, SIGNAL(updated()), this, SLOT(repaint()));
 }
 
 QPointF CircuitView::mapFromCoordinate(QPointF point) { return mapFromCoordinate(point.x(), point.y()); }
 QPointF CircuitView::mapFromCoordinate(double x, double y)
 {
     QPointF coord;
-    coord.setX((x - position().x()) * pixelsPerUnit() + 0.5);
-    coord.setY((y - position().y()) * pixelsPerUnit() + 0.5);
+    coord.setX((x - position().x()) * pixelsPerUnit() / width() + 0.5);
+    coord.setY((y - position().y()) * pixelsPerUnit() / height() + 0.5);
     return coord;
 }
 
@@ -184,7 +205,6 @@ QPoint CircuitView::toPixels(double x, double y)
     return QPoint(x*width(), y*height());
 }
 
-// fmod was returning broken results...
 double CircuitView::dmod(double x, double y) { return x - floor(x/y)*y; }
 double CircuitView::magnitude(QPoint point) { return magnitude(QPointF(point.x(), point.y())); }
 double CircuitView::magnitude(QPointF point) { return sqrt(pow(point.x(), 2) + pow(point.y(), 2)); }
@@ -238,5 +258,3 @@ void CircuitView::setZoom(QPointF pointAi, QPointF pointBi, QPointF pointAf, QPo
     double newZoom = zoom() * magnitude(b) / magnitude(a);
     setZoom(newZoom, hotSpot, update);
 }
-
-void CircuitView::setActive(bool active) { active_ = active; }

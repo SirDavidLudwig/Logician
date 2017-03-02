@@ -1,7 +1,7 @@
 #include "logicgate.h"
 
-LogicGate::LogicGate() :
-    CircuitEntity()
+LogicGate::LogicGate(QPointF position, Orientation orientation) :
+    CircuitComponent(position, orientation)
 {
 
 }
