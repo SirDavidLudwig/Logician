@@ -156,9 +156,12 @@ void CircuitView::drawComponents(QPaintEvent *event, QPainter &painter)
 {
     painter.setRenderHint(QPainter::Antialiasing);
 
+    QTransform transform = painter.transform();
+
     foreach(CircuitComponent *component, circuit()->components()) {
-        component->prepareDraw(position(), size(), pixelsPerUnit_);
+        component->prepareDraw(painter, position(), size(), pixelsPerUnit_);
         component->draw(painter);
+        painter.setTransform(transform);
     }
 }
 

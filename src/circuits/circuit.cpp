@@ -4,7 +4,10 @@ Circuit::Circuit() :
     QObject()
 {
     addComponent(new InputPin());
-    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::East));
+    addComponent(new AndGate(QPointF(0, -20), CircuitComponent::North));
+    addComponent(new AndGate(QPointF(0, -15), CircuitComponent::East));
+    addComponent(new AndGate(QPointF(0, -10), CircuitComponent::West));
+    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::South));
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }
@@ -32,6 +35,5 @@ bool Circuit::removeComponent(CircuitComponent *component)
 
 void Circuit::update()
 {
-    qDebug() << components_.length() << "component(s) in the circuit";
     emit updated();
 }

@@ -43,7 +43,7 @@ public slots:
     void setOrientation(Orientation orientation);
 
     virtual void draw(QPainter &painter);
-    void prepareDraw(QPointF position, QSize screen, double pixelsPerUnit);
+    void prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit);
     void update();
 
 };

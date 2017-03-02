@@ -15,11 +15,30 @@ void CircuitComponent::setPosition(QPointF position) { position_ = position; upd
 
 void CircuitComponent::update() { emit updated(); }
 
-void CircuitComponent::prepareDraw(QPointF position, QSize screen, double pixelsPerUnit)
+void CircuitComponent::prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit)
 {
     viewportPosition_ = position;
     screen_ = screen;
     pixelsPerUnit_ = pixelsPerUnit;
+
+    QTransform transform = painter.transform();
+
+    transform.translate((screen.width()/2) + (position_.x() - viewportPosition_.x())*pixelsPerUnit_ + 1,
+                        (screen.height()/2) + (position_.y() - viewportPosition_.y())*pixelsPerUnit_ + 1);
+
+    switch(orientation_) {
+        case North:
+            transform.rotate(-90);
+            break;
+        case South:
+            transform.rotate(90);
+            break;
+        case West:
+            transform.rotate(180);
+            break;
+    }
+
+    painter.setTransform(transform);
 }
 
 void CircuitComponent::draw(QPainter &painter) { Q_UNUSED(painter); }
@@ -31,6 +50,5 @@ QRectF CircuitComponent::rectF(double x, double y, double width, double height)
 
 QPointF CircuitComponent::pointF(double x, double y)
 {
-    return QPointF((((x - viewportPosition_.x() + position_.x())*pixelsPerUnit_/screen_.width() + 0.5) * screen_.width()),
-                   ((y - viewportPosition_.y() + position_.y())*pixelsPerUnit_/screen_.height() + 0.5) * screen_.height());
+    return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
 }
