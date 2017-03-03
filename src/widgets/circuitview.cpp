@@ -52,9 +52,9 @@ bool CircuitView::event(QEvent *event)
        } else {
             touchDragging_ = false;
        }
-    } else
+    }
 
-        return this->QWidget::event(event);
+    return this->QWidget::event(event);
 }
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)

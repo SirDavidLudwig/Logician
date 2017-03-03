@@ -1,4 +1,6 @@
 #include "application.h"
+#include "../utils/point.h"
+#include "../utils/vector.h"
 
 Application::Application(int argc, char *argv[]) :
     QApplication(argc, argv)

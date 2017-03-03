@@ -17,7 +17,9 @@ HEADERS += \
     src/circuits/inputs/inputpin.h \
     src/circuits/outputs/outputpin.h \
     src/circuits/circuitcomponent.h \
-    src/circuits/gates/andgate.h
+    src/circuits/gates/andgate.h \
+    src/utils/vector.h \
+    src/utils/point.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -34,7 +36,9 @@ SOURCES += \
     src/circuits/inputs/inputpin.cpp \
     src/circuits/outputs/outputpin.cpp \
     src/circuits/circuitcomponent.cpp \
-    src/circuits/gates/andgate.cpp
+    src/circuits/gates/andgate.cpp \
+    src/utils/vector.cpp \
+    src/utils/point.cpp
 
 RESOURCES += \
     resources/resources.qrc
