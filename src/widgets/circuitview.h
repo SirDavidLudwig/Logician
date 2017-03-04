@@ -24,6 +24,8 @@
 
 #include "../circuits/circuit.h"
 #include "../circuits/circuitcomponent.h"
+#include "../utils/point.h"
+#include "../utils/vector.h"
 
 class CircuitView : public QWidget
 {
@@ -36,30 +38,29 @@ public:
 
     Circuit* circuit();
 
-    double dmod(double x, double y); // A fix for fmod
-    double magnitude(QPoint point);
-    double magnitude(QPointF point);
+    long double dmod(long double x, long double y); // A fix for fmod
 
     bool isActive();
 
-    QPointF mapFromCoordinate(QPointF point);
-    QPointF mapFromCoordinate(double x, double y);
+    Point mapFromCoordinate(Point point);
+    Point mapFromCoordinate(long double x, long double y);
 
-    QPointF mapToCoordinate(QPointF point);
-    QPointF mapToCoordinate(double x, double y);
+    Point mapToCoordinate(Point point);
+    Point mapToCoordinate(long double x, long double y);
 
-    QPoint toPixels(QPointF point);
-    QPoint toPixels(double x, double y);
+    QPoint toPixels(Point point);
+    QPoint toPixels(long double x, long double y);
 
-    QPointF toScreen(QPoint point);
-    QPointF toScreen(QPointF point);
-    QPointF toScreen(double x, double y);
+    Point toScreen(QPoint point);
+    Point toScreen(QPointF point);
+    Point toScreen(Point point);
+    Point toScreen(long double x, long double y);
 
-    QPointF position();
-    QPointF positionVelocity();
+    Point position();
+    Point positionVelocity();
 
-    double pixelsPerUnit();
-    double zoom();
+    long double pixelsPerUnit();
+    long double zoom();
 
 protected:
     bool event(QEvent *event);
@@ -80,31 +81,31 @@ private:
     bool touchDragging_;
     bool dragging_;
 
-    QPointF lastPositionVelocity_;
-    QPointF positionVelocity_;
-    QPointF position_;
-    QPointF mousePos_;
-    double pixelsPerUnit_;
+    Vector lastPositionVelocity_;
+    Vector positionVelocity_;
+    Point position_;
+    Point mousePos_;
+    long double pixelsPerUnit_;
 
-    double zoom_;
+    long double zoom_;
 
 public slots:
     void setActive(bool active);
 
     void setCircuit(Circuit* circuit);
 
-    void translate(QPointF position, bool update = true);
-    void translate(double x, double y, bool update = true);
+    void translate(Point position, bool update = true);
+    void translate(long double x, long double y, bool update = true);
 
-    void setPosition(QPointF position);
-    void setPosition(double x, double y);
+    void setPosition(Point position);
+    void setPosition(long double x, long double y);
 
-    void setPositionVelocity(QPointF velocity);
-    void setPositionVelocity(double x, double y);
+    void setPositionVelocity(Point velocity);
+    void setPositionVelocity(long double x, long double y);
 
-    void setZoom(double zoom, bool update = true);
-    void setZoom(double zoom, QPointF point, bool update = true);
-    void setZoom(QPointF pointAi, QPointF pointBi, QPointF pointAf, QPointF pointBf, bool update = true);
+    void setZoom(long double zoom, bool update = true);
+    void setZoom(long double zoom, Point point, bool update = true);
+    void setZoom(Point pointAi, Point pointBi, Point pointAf, Point pointBf, bool update = true);
 
 protected slots:
     void updatePixelsPerUnit();

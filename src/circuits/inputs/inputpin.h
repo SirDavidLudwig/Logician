@@ -11,7 +11,7 @@ class InputPin : public CircuitComponent
 {
     Q_OBJECT
 public:
-    InputPin(QPointF position = QPointF(0, 0));
+    InputPin(Point position = Point(0, 0));
 
 signals:
 

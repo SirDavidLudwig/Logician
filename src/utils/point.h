@@ -13,12 +13,17 @@ public:
 
     long double dot(Point point);
 
+    void setX(long double x);
+    void setY(long double y);
+
     long double x();
     long double y();
 
     QPoint toQPoint();
     QPointF toQPointF();
 
+    void  operator+=(Point &point);
+    void  operator-=(Point &point);
     Point operator+(Point &point);
     Point operator-(Point &point);
     Point operator*(long double scalar);

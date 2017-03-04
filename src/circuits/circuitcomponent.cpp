@@ -1,6 +1,6 @@
 #include "circuitcomponent.h"
 
-CircuitComponent::CircuitComponent(QPointF position, CircuitComponent::Orientation orientation) :
+CircuitComponent::CircuitComponent(Point position, CircuitComponent::Orientation orientation) :
     QObject()
 {
     position_ = position;
@@ -10,12 +10,12 @@ CircuitComponent::CircuitComponent(QPointF position, CircuitComponent::Orientati
 CircuitComponent::Orientation CircuitComponent::orientation() { return orientation_; }
 void CircuitComponent::setOrientation(Orientation orientation) { orientation_ = orientation; update(); }
 
-QPointF CircuitComponent::position() { return position_; }
-void CircuitComponent::setPosition(QPointF position) { position_ = position; update(); }
+Point CircuitComponent::position() { return position_; }
+void CircuitComponent::setPosition(Point position) { position_ = position; update(); }
 
 void CircuitComponent::update() { emit updated(); }
 
-void CircuitComponent::prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit)
+void CircuitComponent::prepareDraw(QPainter &painter, Point position, QSize screen, long double pixelsPerUnit)
 {
     viewportPosition_ = position;
     screen_ = screen;
@@ -43,12 +43,12 @@ void CircuitComponent::prepareDraw(QPainter &painter, QPointF position, QSize sc
 
 void CircuitComponent::draw(QPainter &painter) { Q_UNUSED(painter); }
 
-QRectF CircuitComponent::rectF(double x, double y, double width, double height)
+QRectF CircuitComponent::rectF(long double x, long double y, long double width, long double height)
 {
     return QRectF(pointF(x, y), QSizeF(width*pixelsPerUnit_, height*pixelsPerUnit_));
 }
 
-QPointF CircuitComponent::pointF(double x, double y)
+QPointF CircuitComponent::pointF(long double x, long double y)
 {
     return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
 }

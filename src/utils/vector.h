@@ -17,6 +17,8 @@ public:
 
     Point toPoint();
 
+    void   operator+=(Vector &vector);
+    void   operator-=(Vector &vector);
     Vector operator+(Vector &vector);
     Vector operator-(Vector &vector);
     Vector operator*(long double scalar);

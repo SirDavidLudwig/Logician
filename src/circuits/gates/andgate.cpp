@@ -1,6 +1,6 @@
 #include "andgate.h"
 
-AndGate::AndGate(QPointF position, Orientation orientation) :
+AndGate::AndGate(Point position, Orientation orientation) :
     LogicGate(position, orientation)
 {
 

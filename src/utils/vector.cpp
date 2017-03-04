@@ -16,8 +16,10 @@ Vector Vector::unitVector()
 
 Point Vector::toPoint() { return Point(x(), y()); }
 
-Vector Vector::operator+(Vector &vector)       { return Point(x()+vector.x(), y()+vector.y()); }
-Vector Vector::operator-(Vector &vector)       { return Point(x()-vector.x(), y()-vector.y()); }
+void   Vector::operator+=(Vector &vector)    { setX(x() + vector.x()); setY(y() + vector.y()); }
+void   Vector::operator-=(Vector &vector)    { setX(x() - vector.x()); setY(y() - vector.y()); }
+Vector Vector::operator+(Vector &vector)     { return Point(x()+vector.x(), y()+vector.y()); }
+Vector Vector::operator-(Vector &vector)     { return Point(x()-vector.x(), y()-vector.y()); }
 Vector Vector::operator*(long double scalar) { return Point(x()*scalar, y()*scalar); }
 Vector Vector::operator/(long double scalar) { return Point(x()/scalar, y()/scalar); }
 

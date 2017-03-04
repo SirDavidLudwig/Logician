@@ -12,12 +12,17 @@ long double Point::dot(Point point)
     return x()*point.x() + y()*point.y();
 }
 
+void Point::setX(long double x) { x_ = x; }
+void Point::setY(long double y) { y_ = y; }
+
 long double Point::x() { return x_; }
 long double Point::y() { return y_; }
 
 QPoint  Point::toQPoint()  { return QPoint(round(x()), round(y())); }
 QPointF Point::toQPointF() { return QPointF(x(), y()); }
 
+void  Point::operator+=(Point &point)      { setX(x() + point.x()); setY(y() + point.y()); }
+void  Point::operator-=(Point &point)      { setX(x() - point.x()); setY(y() - point.y()); }
 Point Point::operator+(Point &point)       { return Point(x()+point.x(), y()+point.y()); }
 Point Point::operator-(Point &point)       { return Point(x()-point.x(), y()-point.y()); }
 Point Point::operator*(long double scalar) { return Point(x()*scalar, y()*scalar); }
