@@ -32,7 +32,7 @@ class CircuitView : public QWidget
     Q_OBJECT
 public:
     const int MIN_ZOOM = 10;
-    const int MAX_ZOOM = 100;
+    const int MAX_ZOOM = 200;
 
     CircuitView(QWidget *parent, Circuit *circuit = NULL);
 

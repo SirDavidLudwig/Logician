@@ -9,7 +9,7 @@ CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     dragging_ = false;
     touchDragging_ = false;
     pixelsPerUnit_ = 1;
-    zoom_ = MIN_ZOOM;
+    zoom_ = MAX_ZOOM / 6;
 
     setCircuit(circuit);
 }

@@ -1,11 +1,18 @@
 #include "circuitcomponent.h"
 
+const QColor CircuitComponent::COLOR_DEFAULT = QColor("#9b9b9b");
+const QColor CircuitComponent::COLOR_SELECTED = QColor("#e64c3c");
+
 CircuitComponent::CircuitComponent(Point position, CircuitComponent::Orientation orientation) :
     QObject()
 {
+    selected_ = false;
     position_ = position;
     orientation_ = orientation;
 }
+
+bool CircuitComponent::isSelected() { return selected_; }
+void CircuitComponent::setSelected(bool selected) { selected_ = selected; }
 
 CircuitComponent::Orientation CircuitComponent::orientation() { return orientation_; }
 void CircuitComponent::setOrientation(Orientation orientation) { orientation_ = orientation; update(); }
@@ -51,4 +58,13 @@ QRectF CircuitComponent::rectF(long double x, long double y, long double width, 
 QPointF CircuitComponent::pointF(long double x, long double y)
 {
     return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
+}
+
+QPen CircuitComponent::pen()
+{
+    QPen pen;
+    pen.setCapStyle(Qt::FlatCap);
+    pen.setColor(isSelected() ? COLOR_SELECTED : COLOR_DEFAULT);
+    pen.setWidth(2);
+    return pen;
 }
