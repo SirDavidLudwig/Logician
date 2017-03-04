@@ -19,7 +19,8 @@ HEADERS += \
     src/circuits/circuitcomponent.h \
     src/circuits/gates/andgate.h \
     src/utils/vector.h \
-    src/utils/point.h
+    src/utils/point.h \
+    src/utils/math.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -38,7 +39,8 @@ SOURCES += \
     src/circuits/circuitcomponent.cpp \
     src/circuits/gates/andgate.cpp \
     src/utils/vector.cpp \
-    src/utils/point.cpp
+    src/utils/point.cpp \
+    src/utils/math.cpp
 
 RESOURCES += \
     resources/resources.qrc

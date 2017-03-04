@@ -3,7 +3,6 @@
 CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     QWidget(parent)
 {
-    setMouseTracking(false);
     active_ = false;
     circuit_ = NULL;
     dragging_ = false;
@@ -21,37 +20,7 @@ bool CircuitView::event(QEvent *event)
         event->type() == QEvent::TouchEnd ||
         event->type() == QEvent::TouchCancel)
     {
-        QTouchEvent *touch = (QTouchEvent*) event;
-        if (touch->touchPoints().length() == 2) {
-            touchDragging_ = true;
-            QTouchEvent::TouchPoint pointA = touch->touchPoints()[0];
-            QTouchEvent::TouchPoint pointB = touch->touchPoints()[1];
-
-            Point lastHotSpot = toScreen(pointA.lastPos() + pointB.lastPos()) / 2;
-            Point newHotSpot = toScreen(pointA.pos() + pointB.pos()) / 2;
-            mousePos_ = lastHotSpot;
-
-            Point lastA = toScreen(pointA.lastPos());
-            Point lastB = toScreen(pointB.lastPos());
-
-            Point newA = toScreen(pointA.pos());
-            Point newB = toScreen(pointB.pos());
-
-            if (pointA.state() != Qt::TouchPointReleased && pointB.state() != Qt::TouchPointReleased) {
-                setZoom(lastA, lastB, newA, newB, false);
-                setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot));
-                mousePos_ = newHotSpot;
-                repaint();
-            } else {
-                touchDragging_ = false;
-                setPositionVelocity(lastPositionVelocity_);
-                mousePos_.setX(newHotSpot.x());
-                mousePos_.setY(newHotSpot.y());
-                repaint();
-            }
-       } else {
-            touchDragging_ = false;
-       }
+        touchEvent((QTouchEvent*) event);
     }
 
     return this->QWidget::event(event);
@@ -86,6 +55,54 @@ void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the la
     }
 }
 
+void CircuitView::wheelEvent(QWheelEvent *event)
+{
+    int direction = event->angleDelta().y() / -abs(event->angleDelta().y());
+    setZoom(zoom() - zoom() * 0.1 * direction, toScreen(event->pos()));
+    this->QWidget::wheelEvent(event);
+}
+
+void CircuitView::touchEvent(QTouchEvent *event)
+{
+    if (event->touchPoints().length() == 2) {
+        touchDragging_ = true;
+        QTouchEvent::TouchPoint pointA = event->touchPoints()[0];
+        QTouchEvent::TouchPoint pointB = event->touchPoints()[1];
+
+        Point lastHotSpot = toScreen(pointA.lastPos() + pointB.lastPos()) / 2;
+        Point newHotSpot = toScreen(pointA.pos() + pointB.pos()) / 2;
+        mousePos_ = lastHotSpot;
+
+        Point lastA = toScreen(pointA.lastPos());
+        Point lastB = toScreen(pointB.lastPos());
+
+        Point newA = toScreen(pointA.pos());
+        Point newB = toScreen(pointB.pos());
+
+        qDebug() << (double)Vector(mapToCoordinate(lastA) - mapToCoordinate(lastB)).length();
+
+        if (pointA.state() != Qt::TouchPointReleased && pointB.state() != Qt::TouchPointReleased) {
+            setZoom(lastA, lastB, newA, newB, false);
+            setPositionVelocity(mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot));
+            mousePos_ = newHotSpot;
+            repaint();
+        } else {
+            touchDragging_ = false;
+            setPositionVelocity(lastPositionVelocity_);
+            mousePos_.setX(newHotSpot.x());
+            mousePos_.setY(newHotSpot.y());
+            repaint();
+        }
+   } else {
+        touchDragging_ = false;
+   }
+}
+
+void CircuitView::resizeEvent(QResizeEvent *event)
+{
+    updatePixelsPerUnit();
+}
+
 void CircuitView::paintEvent(QPaintEvent *event)
 {
     QPainter painter;
@@ -108,30 +125,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
     drawGrid(event, painter);
     drawComponents(event, painter);
 
-    QPen pen = painter.pen();
-    pen.setColor(Qt::white);
-    pen.setWidth(10);
-    painter.setPen(pen);
-
-    int line = 1;
-    Point coord = mapToCoordinate(mousePos_);
-    painter.drawText(QPoint(5, 20*line++), "Pixels per unit: " + QString::number((double)pixelsPerUnit()));
-    painter.drawText(QPoint(5, 20*line++), "Position(" + QString::number((double)position().x()) + ", " + QString::number((double)position().y()) + ")");
-    painter.drawText(QPoint(5, 20*line++), "Zoom: " + QString::number((double)zoom()));
-
     painter.end();
-}
-
-void CircuitView::resizeEvent(QResizeEvent *event)
-{
-    updatePixelsPerUnit();
-}
-
-void CircuitView::wheelEvent(QWheelEvent *event)
-{
-    int direction = event->angleDelta().y() / -abs(event->angleDelta().y());
-    setZoom(zoom() - zoom() * 0.1 * direction, toScreen(event->pos()));
-    this->QWidget::wheelEvent(event);
 }
 
 void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
@@ -141,8 +135,8 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
     pen.setWidth(1);
     painter.setPen(pen);
 
-    long double x = dmod(long double(width()/2.0) - pixelsPerUnit()*position().x(), pixelsPerUnit());
-    long double y = dmod(long double(height()/2.0) - pixelsPerUnit()*position().y(), pixelsPerUnit());
+    long double x = Math::dmod(long double(width()/2.0) - pixelsPerUnit()*position().x(), pixelsPerUnit());
+    long double y = Math::dmod(long double(height()/2.0) - pixelsPerUnit()*position().y(), pixelsPerUnit());
     for (x; x < width(); x += pixelsPerUnit()) {
         painter.drawLine(round(x), 0, round(x), height());
     }
@@ -208,8 +202,6 @@ QPoint CircuitView::toPixels(long double x, long double y)
 {
     return QPoint(x*width(), y*height());
 }
-
-long double CircuitView::dmod(long double x, long double y) { return x - floor(x/y)*y; }
 
 void CircuitView::translate(long double x, long double y, bool update) { translate(Point(x, y), update); }
 void CircuitView::translate(Point position, bool update) { position_ += position; if(update) this->update(); }

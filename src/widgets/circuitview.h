@@ -24,6 +24,7 @@
 
 #include "../circuits/circuit.h"
 #include "../circuits/circuitcomponent.h"
+#include "../utils/math.h"
 #include "../utils/point.h"
 #include "../utils/vector.h"
 
@@ -37,8 +38,6 @@ public:
     CircuitView(QWidget *parent, Circuit *circuit = NULL);
 
     Circuit* circuit();
-
-    long double dmod(long double x, long double y); // A fix for fmod
 
     bool isActive();
 
@@ -69,6 +68,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void touchEvent(QTouchEvent *event);
     void wheelEvent(QWheelEvent *event);
 
     void drawGrid(QPaintEvent *event, QPainter &painter);
@@ -105,7 +105,7 @@ public slots:
 
     void setZoom(long double zoom, bool update = true);
     void setZoom(long double zoom, Point point, bool update = true);
-    void setZoom(Point pointAi, Point pointBi, Point pointAf, Point pointBf, bool update = true);
+    void setZoom(Point pointAi, Point pointBi, Point pointAf, Point pointBf, bool update = true); // Zoom to based off a change in points on the screen
 
 protected slots:
     void updatePixelsPerUnit();
