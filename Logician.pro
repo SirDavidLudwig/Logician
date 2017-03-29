@@ -22,7 +22,8 @@ HEADERS += \
     src/utils/point.h \
     src/utils/math.h \
 	src/circuits/circuitsocket.h \
-	src/circuits/wiring/wire.h
+	src/circuits/wiring/wire.h \
+    src/circuits/circuitsignal.h
 
 SOURCES += \
     src/core/application.cpp \
@@ -44,7 +45,8 @@ SOURCES += \
     src/utils/point.cpp \
     src/utils/math.cpp \
 	src/circuits/circuitsocket.cpp \
-	src/circuits/wiring/wire.cpp
+	src/circuits/wiring/wire.cpp \
+    src/circuits/circuitsignal.cpp
 
 RESOURCES += \
     resources/resources.qrc

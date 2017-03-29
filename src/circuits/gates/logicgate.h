@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QObject>
+#include <QPainter>
 #include "../circuitcomponent.h"
 
 class LogicGate : public CircuitComponent

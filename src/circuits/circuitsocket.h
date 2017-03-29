@@ -2,6 +2,9 @@
 #define CIRCUITSOCKET_H
 
 #include <QObject>
+#include <QPoint>
+
+#include "circuitsignal.h"
 
 class CircuitSocket : public QObject
 {
@@ -13,16 +16,24 @@ public:
     };
 
     CircuitSocket(SocketType type);
+    ~CircuitSocket();
 
     const SocketType type();
+    QPoint position();
+
+    CircuitSignal &signal();
 
 private:
     const SocketType type_;
+    QPoint position_;
+    CircuitSignal signal_;
 
 signals:
-    void update();
+    void updated(CircuitSocket*);
 
 public slots:
+    void setPosition(QPoint position);
+    void setSignal(CircuitSignal &signal);
 };
 
 #endif // CIRCUITSOCKET_H
