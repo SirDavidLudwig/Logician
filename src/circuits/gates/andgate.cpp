@@ -3,7 +3,9 @@
 AndGate::AndGate(QPointF position, Orientation orientation) :
     LogicGate(position, orientation)
 {
-    qDebug() << property("test").toString();
+    addInput(QPoint(-2, -1));
+    addInput(QPoint(-2, 1));
+    addOutput(QPoint(0, 1));
 }
 
 void AndGate::draw(QPainter &painter)
@@ -18,4 +20,6 @@ void AndGate::draw(QPainter &painter)
     path.lineTo(pointF(-1, -1));
 
     painter.drawPath(path);
+
+    LogicGate::draw(painter);
 }

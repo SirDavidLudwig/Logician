@@ -11,6 +11,52 @@ CircuitComponent::CircuitComponent(QPointF position, CircuitComponent::Orientati
     orientation_ = orientation;
 }
 
+void CircuitComponent::addInput(QPoint position)
+{
+    CircuitSocket *socket = new CircuitSocket(CircuitSocket::Source);
+    socket->setPosition(position);
+    inputs_.append(socket);
+    connect(socket, SIGNAL(updated(CircuitSocket*)), this, SLOT(inputUpdate(CircuitSocket*)));
+}
+
+void CircuitComponent::addOutput(QPoint position)
+{
+    CircuitSocket *socket = new CircuitSocket(CircuitSocket::Source);
+    socket->setPosition(position);
+    outputs_.append(socket);
+}
+
+void CircuitComponent::removeInput(int index)
+{
+    CircuitSocket *socket = inputs_.takeAt(index);
+
+    if (socket) {
+        disconnect(socket, SIGNAL(updated(CircuitSocket*)), this, SLOT(inputUpdate(CircuitSocket*)));
+        socket->deleteLater();
+    }
+}
+
+void CircuitComponent::removeOutput(int index)
+{
+    CircuitSocket *socket = outputs_.takeAt(index);
+
+    if (socket) {
+        socket->deleteLater();
+    }
+}
+
+void CircuitComponent::clearInputs()
+{
+    for (int i = inputs_.length(); i > 0; i++)
+        removeInput(0);
+}
+
+void CircuitComponent::clearOutputs()
+{
+    for (int i = outputs_.length(); i > 0; i++)
+        removeOutput(0);
+}
+
 bool CircuitComponent::isSelected() { return selected_; }
 void CircuitComponent::setSelected(bool selected) { selected_ = selected; }
 
@@ -48,7 +94,20 @@ void CircuitComponent::prepareDraw(QPainter &painter, QPointF position, QSize sc
     painter.setTransform(transform);
 }
 
-void CircuitComponent::draw(QPainter &painter) { Q_UNUSED(painter); }
+void CircuitComponent::draw(QPainter &painter)
+{
+    painter.setPen(pen());
+
+    foreach (CircuitSocket *socket, inputs_) {
+        painter.drawPoint(pointF(socket->position()));
+    }
+
+    foreach (CircuitSocket *socket, outputs_) {
+        painter.drawPoint(pointF(socket->position()));
+    }
+}
+
+void CircuitComponent::inputUpdate(CircuitSocket *socket) { Q_UNUSED(socket); }
 
 QRectF CircuitComponent::rectF(double x, double y, double width, double height)
 {
@@ -56,6 +115,7 @@ QRectF CircuitComponent::rectF(double x, double y, double width, double height)
 }
 
 QPointF CircuitComponent::pointF(double x, double y)
+QPointF CircuitComponent::pointF(QPointF point) { return pointF(point.x(), point.y()); }
 {
     return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
 }

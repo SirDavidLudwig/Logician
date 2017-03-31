@@ -13,6 +13,7 @@ class Circuit : public QObject
 {
     Q_OBJECT
 public:
+
     Circuit();
 
     QList<CircuitComponent*> components();
