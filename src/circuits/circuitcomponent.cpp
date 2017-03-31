@@ -114,8 +114,8 @@ QRectF CircuitComponent::rectF(double x, double y, double width, double height)
     return QRectF(pointF(x, y), QSizeF(width*pixelsPerUnit_, height*pixelsPerUnit_));
 }
 
-QPointF CircuitComponent::pointF(double x, double y)
 QPointF CircuitComponent::pointF(QPointF point) { return pointF(point.x(), point.y()); }
+QPointF CircuitComponent::pointF(double x, double y)
 {
     return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
 }

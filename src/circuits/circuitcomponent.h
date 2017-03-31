@@ -9,6 +9,8 @@
 #include <QPointF>
 #include <QSize>
 
+#include "circuitsocket.h"
+
 class CircuitComponent : public QObject
 {
     Q_OBJECT
@@ -70,7 +72,6 @@ public slots:
     void setPosition(QPointF position);
     void setOrientation(Orientation orientation);
 
-    virtual void draw(QPainter &painter);
     void prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit);
     void update();
 
