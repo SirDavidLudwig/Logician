@@ -25,8 +25,7 @@
 #include "../circuits/circuit.h"
 #include "../circuits/circuitcomponent.h"
 #include "../utils/math.h"
-#include "../utils/point.h"
-#include "../utils/vector.h"
+
 
 class CircuitView : public QWidget
 {
@@ -41,25 +40,24 @@ public:
 
     bool isActive();
 
-    Point mapFromCoordinate(Point point);
-    Point mapFromCoordinate(long double x, long double y);
+    QPointF mapFromCoordinate(QPointF point);
+    QPointF mapFromCoordinate(double x, double y);
 
-    Point mapToCoordinate(Point point);
-    Point mapToCoordinate(long double x, long double y);
+    QPointF mapToCoordinate(QPointF point);
+    QPointF mapToCoordinate(double x, double y);
 
-    QPoint toPixels(Point point);
-    QPoint toPixels(long double x, long double y);
+    QPoint toPixels(QPointF point);
+    QPoint toPixels(double x, double y);
 
-    Point toScreen(QPoint point);
-    Point toScreen(QPointF point);
-    Point toScreen(Point point);
-    Point toScreen(long double x, long double y);
+    QPointF toScreen(QPoint point);
+    QPointF toScreen(QPointF point);
+    QPointF toScreen(double x, double y);
 
-    Point position();
-    Point positionVelocity();
+    QPointF position();
+    QVector2D positionVelocity();
 
-    long double pixelsPerUnit();
-    long double zoom();
+    double pixelsPerUnit();
+    double zoom();
 
 protected:
     bool event(QEvent *event);
@@ -81,31 +79,31 @@ private:
     bool touchDragging_;
     bool dragging_;
 
-    Vector lastPositionVelocity_;
-    Vector positionVelocity_;
-    Point position_;
-    Point mousePos_;
-    long double pixelsPerUnit_;
+    QVector2D lastPositionVelocity_;
+    QVector2D positionVelocity_;
+    QPointF position_;
+    QPointF mousePos_;
+    double pixelsPerUnit_;
 
-    long double zoom_;
+    double zoom_;
 
 public slots:
     void setActive(bool active);
 
     void setCircuit(Circuit* circuit);
 
-    void translate(Point position, bool update = true);
-    void translate(long double x, long double y, bool update = true);
+    void translate(QVector2D position, bool update = true);
+    void translate(double x, double y, bool update = true);
 
-    void setPosition(Point position);
-    void setPosition(long double x, long double y);
+    void setPosition(QPointF position);
+    void setPosition(double x, double y);
 
-    void setPositionVelocity(Point velocity);
-    void setPositionVelocity(long double x, long double y);
+    void setPositionVelocity(QVector2D velocity);
+    void setPositionVelocity(double x, double y);
 
-    void setZoom(long double zoom, bool update = true);
-    void setZoom(long double zoom, Point point, bool update = true);
-    void setZoom(Point pointAi, Point pointBi, Point pointAf, Point pointBf, bool update = true); // Zoom to based off a change in points on the screen
+    void setZoom(double zoom, bool update = true);
+    void setZoom(double zoom, QPointF point, bool update = true);
+    void setZoom(QPointF pointAi, QPointF pointBi, QPointF pointAf, QPointF pointBf, bool update = true); // Zoom to based off a change in QPointFs on the screen
 
 protected slots:
     void updatePixelsPerUnit();

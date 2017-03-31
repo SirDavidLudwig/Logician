@@ -1,6 +1,6 @@
 #include "outputpin.h"
 
-OutputPin::OutputPin(Point position, Orientation orientation) :
+OutputPin::OutputPin(QPointF position, Orientation orientation) :
     CircuitComponent(position, orientation)
 {
 

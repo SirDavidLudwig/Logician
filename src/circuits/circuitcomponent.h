@@ -9,8 +9,6 @@
 #include <QPointF>
 #include <QSize>
 
-#include "../utils/point.h"
-
 class CircuitComponent : public QObject
 {
     Q_OBJECT
@@ -26,37 +24,37 @@ public:
         West
     };
 
-    CircuitComponent(Point position = Point(0, 0), Orientation orientation = North);
+    CircuitComponent(QPointF position = QPointF(0, 0), Orientation orientation = North);
 
     bool isSelected();
     void setSelected(bool selected);
 
-    Point position();
+    QPointF position();
     Orientation orientation();
 
-    QRectF rectF(long double x, long double y, long double width, long double height);
-    QPointF pointF(long double x, long double y);
+    QRectF rectF(double x, double y, double width, double height);
+    QPointF pointF(double x, double y);
 
     QPen pen();
 
 private:
     bool selected_;
     Orientation orientation_;
-    Point position_;
+    QPointF position_;
 
-    long double pixelsPerUnit_;
-    Point viewportPosition_;
+    double pixelsPerUnit_;
+    QPointF viewportPosition_;
     QSize screen_;
 
 signals:
     void updated();
 
 public slots:
-    void setPosition(Point position);
+    void setPosition(QPointF position);
     void setOrientation(Orientation orientation);
 
     virtual void draw(QPainter &painter);
-    void prepareDraw(QPainter &painter, Point position, QSize screen, long double pixelsPerUnit);
+    void prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit);
     void update();
 
 };

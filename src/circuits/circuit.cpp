@@ -4,10 +4,10 @@ Circuit::Circuit() :
     QObject()
 {
     addComponent(new InputPin());
-    addComponent(new AndGate(Point(0, -20), CircuitComponent::North));
-    addComponent(new AndGate(Point(0, -15), CircuitComponent::East));
-    addComponent(new AndGate(Point(0, -10), CircuitComponent::West));
-    addComponent(new AndGate(Point(0, -5), CircuitComponent::South));
+    addComponent(new AndGate(QPointF(0, -20), CircuitComponent::North));
+    addComponent(new AndGate(QPointF(0, -15), CircuitComponent::East));
+    addComponent(new AndGate(QPointF(0, -10), CircuitComponent::West));
+    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::South));
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }

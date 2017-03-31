@@ -1,6 +1,6 @@
 #include "logicgate.h"
 
-LogicGate::LogicGate(Point position, Orientation orientation) :
+LogicGate::LogicGate(QPointF position, Orientation orientation) :
     CircuitComponent(position, orientation)
 {
     setObjectName("LogicGate");

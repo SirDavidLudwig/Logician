@@ -9,7 +9,7 @@ class OutputPin : public CircuitComponent
 {
     Q_OBJECT
 public:
-    OutputPin(Point position, Orientation orientation);
+    OutputPin(QPointF position, Orientation orientation);
 
 signals:
 

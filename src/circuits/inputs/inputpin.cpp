@@ -1,6 +1,6 @@
 #include "inputpin.h"
 
-InputPin::InputPin(Point position) :
+InputPin::InputPin(QPointF position) :
     CircuitComponent(position, North)
 {
 }

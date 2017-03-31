@@ -6,4 +6,4 @@ CircuitSocket::CircuitSocket(SocketType type) :
 
 }
 
-const CircuitSocket::SocketType CircuitSocket::type() { return type_; }
+CircuitSocket::SocketType CircuitSocket::type() const { return type_; }

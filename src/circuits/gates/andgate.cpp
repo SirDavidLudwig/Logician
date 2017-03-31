@@ -1,6 +1,6 @@
 #include "andgate.h"
 
-AndGate::AndGate(Point position, Orientation orientation) :
+AndGate::AndGate(QPointF position, Orientation orientation) :
     LogicGate(position, orientation)
 {
     qDebug() << property("test").toString();

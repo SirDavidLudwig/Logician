@@ -6,7 +6,7 @@
 namespace Math
 {
     // A fix for fmod
-    long double dmod(long double x, long double y);
+    double dmod(double x, double y);
 }
 
 #endif // MATH_H

@@ -14,7 +14,7 @@ public:
 
     CircuitSocket(SocketType type);
 
-    const SocketType type();
+    SocketType type() const;
 
 private:
     const SocketType type_;

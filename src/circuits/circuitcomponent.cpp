@@ -3,7 +3,7 @@
 const QColor CircuitComponent::COLOR_DEFAULT = QColor("#9b9b9b");
 const QColor CircuitComponent::COLOR_SELECTED = QColor("#e64c3c");
 
-CircuitComponent::CircuitComponent(Point position, CircuitComponent::Orientation orientation) :
+CircuitComponent::CircuitComponent(QPointF position, CircuitComponent::Orientation orientation) :
     QObject()
 {
     selected_ = false;
@@ -17,12 +17,12 @@ void CircuitComponent::setSelected(bool selected) { selected_ = selected; }
 CircuitComponent::Orientation CircuitComponent::orientation() { return orientation_; }
 void CircuitComponent::setOrientation(Orientation orientation) { orientation_ = orientation; update(); }
 
-Point CircuitComponent::position() { return position_; }
-void CircuitComponent::setPosition(Point position) { position_ = position; update(); }
+QPointF CircuitComponent::position() { return position_; }
+void CircuitComponent::setPosition(QPointF position) { position_ = position; update(); }
 
 void CircuitComponent::update() { emit updated(); }
 
-void CircuitComponent::prepareDraw(QPainter &painter, Point position, QSize screen, long double pixelsPerUnit)
+void CircuitComponent::prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit)
 {
     viewportPosition_ = position;
     screen_ = screen;
@@ -50,12 +50,12 @@ void CircuitComponent::prepareDraw(QPainter &painter, Point position, QSize scre
 
 void CircuitComponent::draw(QPainter &painter) { Q_UNUSED(painter); }
 
-QRectF CircuitComponent::rectF(long double x, long double y, long double width, long double height)
+QRectF CircuitComponent::rectF(double x, double y, double width, double height)
 {
     return QRectF(pointF(x, y), QSizeF(width*pixelsPerUnit_, height*pixelsPerUnit_));
 }
 
-QPointF CircuitComponent::pointF(long double x, long double y)
+QPointF CircuitComponent::pointF(double x, double y)
 {
     return QPointF(x * pixelsPerUnit_, y * pixelsPerUnit_);
 }
