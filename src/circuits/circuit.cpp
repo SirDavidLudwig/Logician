@@ -8,6 +8,8 @@ Circuit::Circuit() :
     addComponent(new AndGate(QPointF(0, -15), CircuitComponent::East));
     addComponent(new AndGate(QPointF(0, -10), CircuitComponent::West));
     addComponent(new AndGate(QPointF(0, -5), CircuitComponent::South));
+
+    components()[2]->setSelected(true);
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }

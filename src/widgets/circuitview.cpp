@@ -5,7 +5,6 @@ CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
 {
     active_ = false;
     circuit_ = NULL;
-    dragging_ = false;
     touchDragging_ = false;
     pixelsPerUnit_ = 1;
     zoom_ = MAX_ZOOM / 6;
@@ -28,74 +27,27 @@ bool CircuitView::event(QEvent *event)
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
-    QPointF newPos = toScreen(event->pos());
-    if (event->buttons() & Qt::RightButton) {
-        setPositionVelocity(QVector2D(mapToCoordinate(mousePos_) - mapToCoordinate(newPos)));
-        mousePos_ = newPos;
-        update();
-    }
+    controller_->mouseMoveEvent(this, event);
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
-        dragging_ = true;
-        setPositionVelocity(0, 0);
-    }
-    mousePos_.setX(double(event->pos().x()) / width());
-    mousePos_.setY(double(event->pos().y()) / height());
+    controller_->mousePressEvent(this, event);
 }
 
 void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the last move event to get the velocity
 {
-    if (event->button() == Qt::RightButton) {
-        dragging_ = false;
-        mousePos_.setX(double(event->pos().x()) / width());
-        mousePos_.setY(double(event->pos().y()) / height());
-    }
+    controller_->mouseReleaseEvent(this, event);
 }
 
 void CircuitView::wheelEvent(QWheelEvent *event)
 {
-    int direction = event->angleDelta().y() / -abs(event->angleDelta().y());
-    setZoom(zoom() - zoom() * 0.1 * direction, toScreen(event->pos()));
-    this->QWidget::wheelEvent(event);
+    controller_->wheelEvent(this, event);
 }
 
 void CircuitView::touchEvent(QTouchEvent *event)
 {
-    if (event->touchPoints().length() == 2) {
-        touchDragging_ = true;
-        QTouchEvent::TouchPoint QPointFA = event->touchPoints()[0];
-        QTouchEvent::TouchPoint QPointFB = event->touchPoints()[1];
-
-        QPointF lastHotSpot = toScreen(QPointFA.lastPos() + QPointFB.lastPos()) / 2;
-        QPointF newHotSpot = toScreen(QPointFA.pos() + QPointFB.pos()) / 2;
-        mousePos_ = lastHotSpot;
-
-        QPointF lastA = toScreen(QPointFA.lastPos());
-        QPointF lastB = toScreen(QPointFB.lastPos());
-
-        QPointF newA = toScreen(QPointFA.pos());
-        QPointF newB = toScreen(QPointFB.pos());
-
-        qDebug() << (double)QVector2D(mapToCoordinate(lastA) - mapToCoordinate(lastB)).length();
-
-        if (QPointFA.state() != Qt::TouchPointReleased && QPointFB.state() != Qt::TouchPointReleased) {
-            setZoom(lastA, lastB, newA, newB, false);
-            setPositionVelocity(QVector2D(mapToCoordinate(mousePos_) - mapToCoordinate(newHotSpot)));
-            mousePos_ = newHotSpot;
-            repaint();
-        } else {
-            touchDragging_ = false;
-            setPositionVelocity(lastPositionVelocity_);
-            mousePos_.setX(newHotSpot.x());
-            mousePos_.setY(newHotSpot.y());
-            repaint();
-        }
-   } else {
-        touchDragging_ = false;
-   }
+    controller_->touchEvent(this, event);
 }
 
 void CircuitView::resizeEvent(QResizeEvent *event)
@@ -105,19 +57,21 @@ void CircuitView::resizeEvent(QResizeEvent *event)
 
 void CircuitView::paintEvent(QPaintEvent *event)
 {
+    bool doRepaint = false;
+
+    if (isPositionFalloffEnabled_) {
+        if (sqrt(pow(positionVelocity().x(), 2) + pow(positionVelocity().y(), 2)) > 0.001) {
+            translate(positionVelocity(), false);
+            setPositionVelocity(positionVelocity() - positionVelocity() * MIN_ZOOM * 0.45 / zoom());
+        }
+    } else {
+        translate(positionVelocity(), false);
+        setPositionVelocity(0, 0);
+    }
+
     QPainter painter;
 
     painter.begin(this);
-
-    if (dragging_ || touchDragging_) {
-        translate(QVector2D(positionVelocity()), false);
-        setPositionVelocity(0, 0);
-    } else {
-        if (sqrt(pow(positionVelocity().x(), 2) + pow(positionVelocity().y(), 2)) > 0.001) {
-            translate(positionVelocity(), true);
-            setPositionVelocity(positionVelocity() - positionVelocity() * MIN_ZOOM * 0.45 / zoom());
-        }
-    }
 
     QFont font("Tahoma", 15);
     painter.setFont(font);
@@ -126,6 +80,9 @@ void CircuitView::paintEvent(QPaintEvent *event)
     drawComponents(event, painter);
 
     painter.end();
+
+    if (doRepaint)
+        update();
 }
 
 void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
@@ -172,6 +129,12 @@ void CircuitView::setCircuit(Circuit* circuit)
     connect(circuit, SIGNAL(updated()), this, SLOT(repaint()));
 }
 
+CircuitViewController* CircuitView::controller() { return controller_; }
+void CircuitView::setController(CircuitViewController *controller)
+{
+    controller_ = controller;
+}
+
 QPointF CircuitView::mapFromCoordinate(QPointF point) { return mapFromCoordinate(point.x(), point.y()); }
 QPointF CircuitView::mapFromCoordinate(double x, double y)
 {
@@ -202,6 +165,9 @@ QPoint CircuitView::toPixels(double x, double y)
     return QPoint(x*width(), y*height());
 }
 
+bool CircuitView::isPositionFalloffEnabled() { return isPositionFalloffEnabled_; }
+void CircuitView::setPositionFalloffEnabled(bool enabled) { isPositionFalloffEnabled_ = enabled; }
+
 void CircuitView::translate(double x, double y, bool update) { translate(QVector2D(x, y), update); }
 void CircuitView::translate(QVector2D position, bool update) { position_ += position.toPointF(); if(update) this->update(); }
 
@@ -218,6 +184,7 @@ void CircuitView::setPosition(double x, double y)
 }
 
 QVector2D CircuitView::positionVelocity() { return positionVelocity_; }
+QVector2D CircuitView::lastPositionVelocity() { return lastPositionVelocity_; }
 void CircuitView::setPositionVelocity(QVector2D velocity) { setPositionVelocity(velocity.x(), velocity.y()); }
 void CircuitView::setPositionVelocity(double x, double y)
 {

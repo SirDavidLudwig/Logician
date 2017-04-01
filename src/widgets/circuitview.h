@@ -15,7 +15,6 @@
 #include <QObject>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QPanGesture>
 #include <QPoint>
 #include <QPointF>
 #include <QResizeEvent>
@@ -24,6 +23,7 @@
 
 #include "../circuits/circuit.h"
 #include "../circuits/circuitcomponent.h"
+#include "../controllers/circuitviewcontroller.h"
 #include "../utils/math.h"
 
 
@@ -37,6 +37,7 @@ public:
     CircuitView(QWidget *parent, Circuit *circuit = NULL);
 
     Circuit* circuit();
+    CircuitViewController* controller();
 
     bool isActive();
 
@@ -53,8 +54,11 @@ public:
     QPointF toScreen(QPointF point);
     QPointF toScreen(double x, double y);
 
+    bool isPositionFalloffEnabled();
+
     QPointF position();
     QVector2D positionVelocity();
+    QVector2D lastPositionVelocity();
 
     double pixelsPerUnit();
     double zoom();
@@ -74,10 +78,11 @@ protected:
 
 private:
     Circuit *circuit_;
+    CircuitViewController *controller_;
 
     bool active_;
     bool touchDragging_;
-    bool dragging_;
+    bool isPositionFalloffEnabled_ = true;
 
     QVector2D lastPositionVelocity_;
     QVector2D positionVelocity_;
@@ -91,6 +96,9 @@ public slots:
     void setActive(bool active);
 
     void setCircuit(Circuit* circuit);
+    void setController(CircuitViewController *controller);
+
+    void setPositionFalloffEnabled(bool enabled);
 
     void translate(QVector2D position, bool update = true);
     void translate(double x, double y, bool update = true);

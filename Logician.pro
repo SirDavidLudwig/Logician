@@ -21,7 +21,8 @@ HEADERS += \
     src/widgets/circuitview.h \
     src/widgets/mainwindowmenubar.h \
     src/widgets/mainwindowtoolbar.h \
-    src/widgets/mainwindowui.h
+    src/widgets/mainwindowui.h \
+    src/controllers/circuitviewcontroller.h
 
 SOURCES += \
     src/main.cpp \
@@ -42,7 +43,8 @@ SOURCES += \
     src/widgets/circuitview.cpp \
     src/widgets/mainwindowmenubar.cpp \
     src/widgets/mainwindowtoolbar.cpp \
-    src/widgets/mainwindowui.cpp
+    src/widgets/mainwindowui.cpp \
+    src/controllers/circuitviewcontroller.cpp
 
 RESOURCES += \
     resources/resources.qrc
