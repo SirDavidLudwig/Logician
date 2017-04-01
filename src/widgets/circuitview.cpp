@@ -9,6 +9,7 @@ CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     pixelsPerUnit_ = 1;
     zoom_ = MAX_ZOOM / 6;
 
+    setController(new CircuitViewController());
     setCircuit(circuit);
 }
 
