@@ -8,7 +8,7 @@ class AndGate : public LogicGate
 {
     Q_OBJECT
 public:
-    AndGate(QPointF position = QPointF(0, 0), Orientation orientation = North);
+    AndGate(QPointF position = QPointF(0, 0), Orientation orientation = East);
 
 public slots:
     void draw(QPainter &painter);

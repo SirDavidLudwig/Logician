@@ -6,12 +6,11 @@ AndGate::AndGate(QPointF position, Orientation orientation) :
     addInput(QPoint(-2, -1));
     addInput(QPoint(-2, 1));
     addOutput(QPoint(0, 1));
-
 }
 
 void AndGate::draw(QPainter &painter)
 {
-    setBoundingBox(QRectF(-1, -1, 2, 2));
+    setBoundingBox(QRectF(-2, -1, 3, 2));
     painter.setBrush(Qt::NoBrush);
     painter.setPen(pen());
 

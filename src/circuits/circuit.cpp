@@ -4,7 +4,7 @@ Circuit::Circuit() :
     QObject()
 {
 //    addComponent(new InputPin());
-    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::North));
+    addComponent(new AndGate(QPointF(0, 0), CircuitComponent::East));
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }

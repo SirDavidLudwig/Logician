@@ -78,20 +78,20 @@ void CircuitComponent::setBoundingBox(QRectF bounds)
     if (orientation_ == East)
         tBounds = bounds;
     else if (orientation_ == West) {
-        tBounds.setTopLeft(bounds.bottomRight());
-        tBounds.setBottomRight(bounds.topLeft());
+        tBounds.setTopLeft(-bounds.bottomRight());
+        tBounds.setBottomRight(-bounds.topLeft());
     }
     else if (orientation_ == North) {
         tBounds.setTopRight(QPointF(bounds.bottomRight().y(), -bounds.bottomRight().x()));
-        tBounds.setBottomLeft(QPointF(bounds.topLeft().y(), -tBounds.topLeft().x()));
+        tBounds.setBottomLeft(QPointF(bounds.topLeft().y(), -bounds.topLeft().x()));
     }
     else {
         tBounds.setTopRight(QPointF(-bounds.topLeft().y(), bounds.topLeft().x()));
-        tBounds.setBottomLeft(QPointF(-bounds.bottomRight().y(), tBounds.bottomRight().x()));
+        tBounds.setBottomLeft(QPointF(-bounds.bottomRight().y(), bounds.bottomRight().x()));
     }
 
-    tBounds.setX(position_.x() + tBounds.x());
-    tBounds.setY(position_.y() + tBounds.y());
+    tBounds.setTopLeft(position_ + tBounds.topLeft());
+    tBounds.setBottomRight(position_ + tBounds.bottomRight());
 
     boundingBox_ = tBounds;
 
