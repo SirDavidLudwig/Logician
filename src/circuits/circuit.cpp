@@ -3,16 +3,12 @@
 Circuit::Circuit() :
     QObject()
 {
-    addComponent(new InputPin());
-    addComponent(new AndGate(QPointF(0, -20), CircuitComponent::North));
-    addComponent(new AndGate(QPointF(0, -15), CircuitComponent::East));
-    addComponent(new AndGate(QPointF(0, -10), CircuitComponent::West));
-    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::South));
-
-    components()[2]->setSelected(true);
+//    addComponent(new InputPin());
+    addComponent(new AndGate(QPointF(0, -5), CircuitComponent::North));
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }
+QList<CircuitComponent*> Circuit::selectedComponents() { return selectedComponents_; }
 
 bool Circuit::addComponent(CircuitComponent *component)
 {
@@ -33,6 +29,59 @@ bool Circuit::removeComponent(CircuitComponent *component)
         return true;
     }
     return false;
+}
+
+void Circuit::selectAll(bool repaint)
+{
+    foreach (CircuitComponent *component, components_) {
+        selectComponent(component);
+    }
+
+    if (repaint)
+        emit updated();
+}
+
+void Circuit::deselectAll(bool repaint)
+{
+    foreach (CircuitComponent *component, selectedComponents())
+        component->setSelected(false);
+    selectedComponents_.clear();
+
+    if (repaint)
+        emit updated();
+}
+
+void Circuit::selectComponent(CircuitComponent *component, bool repaint)
+{
+    if (!selectedComponents_.contains(component)) {
+        component->setSelected(true);
+        selectedComponents_.append(component);
+    }
+
+    if (repaint)
+        emit updated();
+}
+
+void Circuit::deselectComponent(CircuitComponent *component, bool repaint)
+{
+    if (selectedComponents_.contains(component)) {
+        component->setSelected(false);
+        selectedComponents_.removeOne(component);
+    }
+
+    if (repaint)
+        emit updated();
+}
+
+void Circuit::toggleSelectComponent(CircuitComponent *component, bool repaint)
+{
+    if (component->isSelected())
+        deselectComponent(component, false);
+    else
+        selectComponent(component, false);
+
+    if (repaint)
+        emit updated();
 }
 
 void Circuit::update()

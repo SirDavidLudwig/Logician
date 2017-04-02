@@ -12,6 +12,16 @@ bool CircuitViewController::event(CircuitView *view, QEvent *event)
     return false;
 }
 
+void CircuitViewController::keyPressEvent(CircuitView *view, QKeyEvent *event)
+{
+    qDebug() << "Pressed" << view;
+}
+
+void CircuitViewController::keyReleaseEvent(CircuitView *view, QKeyEvent *event)
+{
+    qDebug() << "Released";
+}
+
 void CircuitViewController::mouseMoveEvent(CircuitView *view, QMouseEvent *event)
 {
     QPointF newPos = view->toScreen(event->pos());
@@ -25,9 +35,17 @@ void CircuitViewController::mouseMoveEvent(CircuitView *view, QMouseEvent *event
 void CircuitViewController::mousePressEvent(CircuitView *view, QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton) {
-        //dragging_ = true;
+        dragging_ = true;
         view->setPositionFalloffEnabled(!(dragging_ || touchDragging_));
         view->setPositionVelocity(0, 0);
+    } else if (event->button() == Qt::LeftButton) {
+        CircuitComponent *component = view->componentAt(view->mapToCoordinate(view->toScreen(event->pos())));
+        view->circuit()->deselectAll(false);
+        if (component != nullptr) {
+            view->circuit()->selectComponent(component, true);
+        } else {
+            view->circuit()->update();
+        }
     }
 
     mousePos_.setX(double(event->pos().x()) / view->width());
@@ -39,6 +57,7 @@ void CircuitViewController::mouseReleaseEvent(CircuitView *view, QMouseEvent *ev
     if (event->button() == Qt::RightButton) {
         dragging_ = false;
         view->setPositionFalloffEnabled(!(dragging_ || touchDragging_));
+
         mousePos_.setX(double(event->pos().x()) / view->width());
         mousePos_.setY(double(event->pos().y()) / view->height());
     }

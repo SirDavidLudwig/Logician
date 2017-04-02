@@ -31,9 +31,10 @@ Menu Bar:
 	Help:
 		About
 
-Tools:
+Toolbar:
 	Select
 	Pan
 	Zoom
+	Delete
 	Nudge
 	Wire

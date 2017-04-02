@@ -6,7 +6,7 @@ TEMPLATE = app
 HEADERS += \
     src/circuits/circuit.h \
     src/circuits/circuitcomponent.h \
-    src/circutis/circuitsignal.h \
+	src/circuits/circuitsignal.h \
     src/circuits/circuitsocket.h \
     src/circuits/gates/andgate.h \
     src/circuits/gates/logicgate.h \

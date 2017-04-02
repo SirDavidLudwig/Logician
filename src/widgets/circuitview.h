@@ -12,6 +12,7 @@
 #include <QGLFormat>
 #include <QGLWidget>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include <QObject>
 #include <QPainter>
 #include <QPaintEvent>
@@ -41,6 +42,9 @@ public:
 
     bool isActive();
 
+    CircuitComponent* componentAt(QPointF point);
+    CircuitComponent* componentAt(double x, double y);
+
     QPointF mapFromCoordinate(QPointF point);
     QPointF mapFromCoordinate(double x, double y);
 
@@ -65,6 +69,8 @@ public:
 
 protected:
     bool event(QEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);

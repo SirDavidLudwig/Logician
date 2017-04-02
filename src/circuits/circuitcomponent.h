@@ -7,9 +7,12 @@
 #include <QPainter>
 #include <QPen>
 #include <QPointF>
+#include <QRectF>
 #include <QSize>
 
 #include "circuitsocket.h"
+
+class Circuit;
 
 class CircuitComponent : public QObject
 {
@@ -26,13 +29,16 @@ public:
         West
     };
 
-    CircuitComponent(QPointF position = QPointF(0, 0), Orientation orientation = North);
+    CircuitComponent(QPointF position = QPointF(0, 0), Orientation orientation = East);
+
+    Circuit* circuit();
 
     QList<CircuitSocket*> inputs();
     QList<CircuitSocket*> outputs();
 
     bool isSelected();
-    void setSelected(bool selected);
+
+    QRectF boundingBox();
 
     QPointF position();
     Orientation orientation();
@@ -44,6 +50,8 @@ public:
     QPen pen();
 
 protected:
+    void setBoundingBox(QRectF bounds);
+
     void addInput(QPoint position);
     void addOutput(QPoint position);
 
@@ -53,17 +61,26 @@ protected:
     void clearInputs();
     void clearOutputs();
 
+
 private:
+    friend class Circuit;
+
+    Circuit *circuit_ = nullptr;
+
     QList<CircuitSocket*> inputs_;
     QList<CircuitSocket*> outputs_;
 
     bool selected_;
+    QRectF boundingBox_;
     Orientation orientation_;
     QPointF position_;
 
     double pixelsPerUnit_;
     QPointF viewportPosition_;
     QSize screen_;
+
+    void setCircuit(Circuit *circuit);
+    void setSelected(bool selected);
 
 signals:
     void updated();

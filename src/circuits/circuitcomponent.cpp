@@ -1,4 +1,5 @@
 #include "circuitcomponent.h"
+#include "circuit.h"
 
 const QColor CircuitComponent::COLOR_DEFAULT = QColor("#9b9b9b");
 const QColor CircuitComponent::COLOR_SELECTED = QColor("#e64c3c");
@@ -6,6 +7,7 @@ const QColor CircuitComponent::COLOR_SELECTED = QColor("#e64c3c");
 CircuitComponent::CircuitComponent(QPointF position, CircuitComponent::Orientation orientation) :
     QObject()
 {
+    setBoundingBox(QRectF(0, 0, 0, 0));
     selected_ = false;
     position_ = position;
     orientation_ = orientation;
@@ -57,11 +59,44 @@ void CircuitComponent::clearOutputs()
         removeOutput(0);
 }
 
+Circuit* CircuitComponent::circuit() { return circuit_; }
+void CircuitComponent::setCircuit(Circuit *circuit)
+{
+    circuit_ = circuit;
+}
+
 bool CircuitComponent::isSelected() { return selected_; }
 void CircuitComponent::setSelected(bool selected) { selected_ = selected; }
 
 CircuitComponent::Orientation CircuitComponent::orientation() { return orientation_; }
 void CircuitComponent::setOrientation(Orientation orientation) { orientation_ = orientation; update(); }
+
+QRectF CircuitComponent::boundingBox() { return boundingBox_; }
+void CircuitComponent::setBoundingBox(QRectF bounds)
+{
+    QRectF tBounds;
+    if (orientation_ == East)
+        tBounds = bounds;
+    else if (orientation_ == West) {
+        tBounds.setTopLeft(bounds.bottomRight());
+        tBounds.setBottomRight(bounds.topLeft());
+    }
+    else if (orientation_ == North) {
+        tBounds.setTopRight(QPointF(bounds.bottomRight().y(), -bounds.bottomRight().x()));
+        tBounds.setBottomLeft(QPointF(bounds.topLeft().y(), -tBounds.topLeft().x()));
+    }
+    else {
+        tBounds.setTopRight(QPointF(-bounds.topLeft().y(), bounds.topLeft().x()));
+        tBounds.setBottomLeft(QPointF(-bounds.bottomRight().y(), tBounds.bottomRight().x()));
+    }
+
+    tBounds.setX(position_.x() + tBounds.x());
+    tBounds.setY(position_.y() + tBounds.y());
+
+    boundingBox_ = tBounds;
+
+    qDebug() << boundingBox_;
+}
 
 QPointF CircuitComponent::position() { return position_; }
 void CircuitComponent::setPosition(QPointF position) { position_ = position; update(); }

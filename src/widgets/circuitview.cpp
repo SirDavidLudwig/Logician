@@ -9,12 +9,15 @@ CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     pixelsPerUnit_ = 1;
     zoom_ = MAX_ZOOM / 6;
 
+    setFocusPolicy(Qt::StrongFocus);
+
     setController(new CircuitViewController());
     setCircuit(circuit);
 }
 
 bool CircuitView::event(QEvent *event)
 {
+    // Forward touch events
     if (event->type() == QEvent::TouchBegin ||
         event->type() == QEvent::TouchUpdate ||
         event->type() == QEvent::TouchEnd ||
@@ -23,7 +26,23 @@ bool CircuitView::event(QEvent *event)
         touchEvent((QTouchEvent*) event);
     }
 
+    // Disable key auto-repeat
+    else if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+        if (((QKeyEvent*)event)->isAutoRepeat())
+            return true;
+    }
+
     return this->QWidget::event(event);
+}
+
+void CircuitView::keyPressEvent(QKeyEvent *event)
+{
+    controller_->keyPressEvent(this, event);
+}
+
+void CircuitView::keyReleaseEvent(QKeyEvent *event)
+{
+    controller_->keyReleaseEvent(this, event);
 }
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
@@ -64,6 +83,7 @@ void CircuitView::paintEvent(QPaintEvent *event)
         if (sqrt(pow(positionVelocity().x(), 2) + pow(positionVelocity().y(), 2)) > 0.001) {
             translate(positionVelocity(), false);
             setPositionVelocity(positionVelocity() - positionVelocity() * MIN_ZOOM * 0.45 / zoom());
+            doRepaint = true;
         }
     } else {
         translate(positionVelocity(), false);
@@ -134,6 +154,17 @@ CircuitViewController* CircuitView::controller() { return controller_; }
 void CircuitView::setController(CircuitViewController *controller)
 {
     controller_ = controller;
+}
+
+CircuitComponent* CircuitView::componentAt(QPointF point) { return componentAt(point.x(), point.y()); }
+CircuitComponent* CircuitView::componentAt(double x, double y)
+{
+    qDebug() << x << y;
+    foreach (CircuitComponent* component, circuit_->components()) {
+        if (component->boundingBox().contains(x, y))
+            return component;
+    }
+    return nullptr;
 }
 
 QPointF CircuitView::mapFromCoordinate(QPointF point) { return mapFromCoordinate(point.x(), point.y()); }

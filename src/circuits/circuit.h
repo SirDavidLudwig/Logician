@@ -17,9 +17,11 @@ public:
     Circuit();
 
     QList<CircuitComponent*> components();
+    QList<CircuitComponent*> selectedComponents();
 
 private:
     QList<CircuitComponent*> components_;
+    QList<CircuitComponent*> selectedComponents_;
 
 signals:
     void updated();
@@ -27,6 +29,12 @@ signals:
 public slots:
     bool addComponent(CircuitComponent *component);
     bool removeComponent(CircuitComponent *component);
+
+    void selectAll(bool repaint = true);
+    void deselectAll(bool repaint = true);
+    void selectComponent(CircuitComponent *component, bool repaint = true);
+    void deselectComponent(CircuitComponent *component, bool repaint = true);
+    void toggleSelectComponent(CircuitComponent *component, bool repaint = true);
 
     void update();
 };
