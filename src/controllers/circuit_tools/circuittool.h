@@ -4,6 +4,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QPainter>
 #include <QWheelEvent>
 
 class CircuitView;
@@ -19,6 +20,9 @@ public:
     };
 
     CircuitTool(Tool tool);
+
+    virtual bool preDraw(CircuitView *view, QPainter &painter);
+    virtual bool draw(CircuitView *view, QPainter &painter);
 
     virtual bool event(CircuitView *view, QEvent *event);
     virtual bool keyPressEvent(CircuitView *view, QKeyEvent *event);

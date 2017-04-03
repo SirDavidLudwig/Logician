@@ -20,6 +20,20 @@ void CircuitViewController::setActiveTool(CircuitTool::Tool tool)
 
 }
 
+void CircuitViewController::preDraw(CircuitView *view, QPainter &painter)
+{
+    if (!activeTool_->preDraw(view, painter))
+        foreach(CircuitTool *tool, backgroundTools_)
+            tool->preDraw(view, painter);
+}
+
+void CircuitViewController::draw(CircuitView *view, QPainter &painter)
+{
+    if (!activeTool_->draw(view, painter))
+        foreach(CircuitTool *tool, backgroundTools_)
+            tool->draw(view, painter);
+}
+
 bool CircuitViewController::event(CircuitView *view, QEvent *event)
 {
     return activeTool_->event(view, event);

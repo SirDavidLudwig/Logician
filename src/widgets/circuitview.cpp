@@ -97,8 +97,12 @@ void CircuitView::paintEvent(QPaintEvent *event)
     QFont font("Tahoma", 15);
     painter.setFont(font);
 
+    controller_->preDraw(this, painter);
+
     drawGrid(event, painter);
     drawComponents(event, painter);
+
+    controller_->draw(this, painter);
 
     painter.end();
 

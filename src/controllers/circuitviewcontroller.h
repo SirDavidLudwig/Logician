@@ -22,6 +22,9 @@ class CircuitViewController : public QObject
 public:
     CircuitViewController();
 
+    void preDraw(CircuitView *view, QPainter &painter);
+    void draw(CircuitView *view, QPainter &painter);
+
     bool event(CircuitView *view, QEvent *event);
     void keyPressEvent(CircuitView *view, QKeyEvent *event);
     void keyReleaseEvent(CircuitView *view, QKeyEvent *event);
