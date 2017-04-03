@@ -1,6 +1,6 @@
-#include "andgate.h"
+#include "norgate.h"
 
-AndGate::AndGate(QPointF position, Orientation orientation) :
+NorGate::NorGate(QPointF position, Orientation orientation) :
     LogicGate(position, orientation)
 {
     addInput(QPoint(-1, -1));
@@ -8,7 +8,7 @@ AndGate::AndGate(QPointF position, Orientation orientation) :
     addOutput(QPoint(1, 0));
 }
 
-void AndGate::draw(QPainter &painter)
+void NorGate::draw(QPainter &painter)
 {
     setBoundingBox(QRectF(-1, -1, 2, 2));
     painter.setBrush(Qt::NoBrush);
@@ -16,11 +16,13 @@ void AndGate::draw(QPainter &painter)
 
     QPainterPath path;
     path.moveTo(pointF(-1, -1));
-    path.arcTo(rectF(-1, -1, 2, 2), 90, -180);
-    path.lineTo(pointF(-1, 1));
-    path.lineTo(pointF(-1, -1));
+    path.quadTo(pointF(0.5, -1), pointF(0.80, 0));
+    path.quadTo(pointF(0.5, 1), pointF(-1, 1));
+    path.quadTo(pointF(-0.5, 0), pointF(-1, -1));
 
     painter.drawPath(path);
+    painter.drawEllipse(rectF(0.80, -0.1, 0.2, 0.2));
 
     LogicGate::draw(painter);
 }
+

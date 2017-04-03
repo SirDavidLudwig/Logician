@@ -4,7 +4,13 @@ Circuit::Circuit() :
     QObject()
 {
 //    addComponent(new InputPin());
-    addComponent(new AndGate(QPointF(0, 0), CircuitComponent::East));
+    addComponent(new XnorGate(QPointF(0, 15), CircuitComponent::East));
+    addComponent(new AndGate(QPointF(0, 10), CircuitComponent::East));
+    addComponent(new OrGate(QPointF(0, 5), CircuitComponent::East));
+    addComponent(new NandGate(QPointF(0, 0), CircuitComponent::East));
+    addComponent(new NorGate(QPointF(0, -5), CircuitComponent::East));
+    addComponent(new NotGate(QPointF(0, -10), CircuitComponent::East));
+    addComponent(new XorGate(QPointF(0, -15), CircuitComponent::East));
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }

@@ -8,6 +8,13 @@
 
 #include "inputs/inputpin.h"
 #include "gates/andgate.h"
+#include "gates/orgate.h"
+#include "gates/nandgate.h"
+#include "gates/norgate.h"
+#include "gates/notgate.h"
+#include "gates/xorgate.h"
+#include "gates/xnorgate.h"
+
 
 class Circuit : public QObject
 {

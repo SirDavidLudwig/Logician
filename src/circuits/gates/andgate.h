@@ -2,6 +2,7 @@
 #define ANDGATE_H
 
 #include <QObject>
+
 #include "logicgate.h"
 
 class AndGate : public LogicGate

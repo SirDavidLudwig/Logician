@@ -4,7 +4,9 @@
 #include <QDebug>
 #include <QObject>
 #include <QPainter>
+
 #include "../circuitcomponent.h"
+#include "../../utils/math.h"
 
 class LogicGate : public CircuitComponent
 {
