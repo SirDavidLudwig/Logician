@@ -8,6 +8,12 @@
 #include <QTouchEvent>
 #include <QWheelEvent>
 
+#include "circuit_tools/circuittool.h"
+#include "circuit_tools/circuitaddcomponenttool.h"
+#include "circuit_tools/circuitpantool.h"
+#include "circuit_tools/circuitselecttool.h"
+#include "circuit_tools/circuitwiringtool.h"
+
 class CircuitView;
 
 class CircuitViewController : public QObject
@@ -25,14 +31,18 @@ public:
     void wheelEvent(CircuitView *view, QWheelEvent *event);
     void touchEvent(CircuitView* view, QTouchEvent *event);
 
+    CircuitTool* activeTool();
+
 private:
-    QPointF mousePos_;
-    bool dragging_ = false;
-    bool touchDragging_ = false;
+    CircuitTool *activeTool_ = nullptr;
+
+    QList<CircuitTool*> backgroundTools_;
 
 signals:
 
 public slots:
+    void setActiveTool(CircuitTool *tool);
+    void setActiveTool(CircuitTool::Tool tool);
 };
 
 #endif // CIRCUITVIEWCONTROLLER_H

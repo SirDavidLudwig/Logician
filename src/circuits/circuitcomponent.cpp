@@ -94,8 +94,6 @@ void CircuitComponent::setBoundingBox(QRectF bounds)
     tBounds.setBottomRight(position_ + tBounds.bottomRight());
 
     boundingBox_ = tBounds;
-
-    qDebug() << boundingBox_;
 }
 
 QPointF CircuitComponent::position() { return position_; }

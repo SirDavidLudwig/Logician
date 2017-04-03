@@ -13,5 +13,6 @@
         <file>svg/search-plus.svg</file>
         <file>png/gates.png</file>
         <file>png/gates_accent.png</file>
+        <file>png/3_way_switch_right.png</file>
     </qresource>
 </RCC>

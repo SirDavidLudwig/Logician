@@ -57,7 +57,6 @@ void Circuit::selectComponent(CircuitComponent *component, bool repaint)
         component->setSelected(true);
         selectedComponents_.append(component);
     }
-
     if (repaint)
         emit updated();
 }

@@ -22,7 +22,12 @@ HEADERS += \
     src/widgets/mainwindowmenubar.h \
     src/widgets/mainwindowtoolbar.h \
     src/widgets/mainwindowui.h \
-    src/controllers/circuitviewcontroller.h
+    src/controllers/circuitviewcontroller.h \
+	src/controllers/circuit_tools/circuittool.h \
+    src/controllers/circuit_tools/circuitselecttool.h \
+    src/controllers/circuit_tools/circuitaddcomponenttool.h \
+    src/controllers/circuit_tools/circuitwiringtool.h \
+    src/controllers/circuit_tools/circuitpantool.h
 
 SOURCES += \
     src/main.cpp \
@@ -44,7 +49,12 @@ SOURCES += \
     src/widgets/mainwindowmenubar.cpp \
     src/widgets/mainwindowtoolbar.cpp \
     src/widgets/mainwindowui.cpp \
-    src/controllers/circuitviewcontroller.cpp
+    src/controllers/circuitviewcontroller.cpp \
+	src/controllers/circuit_tools/circuittool.cpp \
+    src/controllers/circuit_tools/circuitselecttool.cpp \
+    src/controllers/circuit_tools/circuitaddcomponenttool.cpp \
+    src/controllers/circuit_tools/circuitwiringtool.cpp \
+    src/controllers/circuit_tools/circuitpantool.cpp
 
 RESOURCES += \
     resources/resources.qrc

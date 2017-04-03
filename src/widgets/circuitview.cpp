@@ -127,6 +127,7 @@ void CircuitView::drawGrid(QPaintEvent *event, QPainter &painter)
 void CircuitView::drawComponents(QPaintEvent *event, QPainter &painter)
 {
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
     QTransform transform = painter.transform();
 
@@ -159,7 +160,6 @@ void CircuitView::setController(CircuitViewController *controller)
 CircuitComponent* CircuitView::componentAt(QPointF point) { return componentAt(point.x(), point.y()); }
 CircuitComponent* CircuitView::componentAt(double x, double y)
 {
-    qDebug() << x << y;
     foreach (CircuitComponent* component, circuit_->components()) {
         if (component->boundingBox().contains(x, y))
             return component;
