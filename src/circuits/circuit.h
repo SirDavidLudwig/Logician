@@ -39,9 +39,12 @@ public slots:
 
     void selectAll(bool repaint = true);
     void deselectAll(bool repaint = true);
+
     void selectComponent(CircuitComponent *component, bool repaint = true);
     void deselectComponent(CircuitComponent *component, bool repaint = true);
     void toggleSelectComponent(CircuitComponent *component, bool repaint = true);
+
+    void deleteSelected();
 
     void update();
 };

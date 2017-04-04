@@ -10,16 +10,6 @@ CircuitViewController::CircuitViewController() :
     setActiveTool(new CircuitSelectTool());
 }
 
-CircuitTool* CircuitViewController::activeTool() { return activeTool_; }
-void CircuitViewController::setActiveTool(CircuitTool *tool)
-{
-    activeTool_ = tool;
-}
-void CircuitViewController::setActiveTool(CircuitTool::Tool tool)
-{
-
-}
-
 void CircuitViewController::preDraw(CircuitView *view, QPainter &painter)
 {
     if (!activeTool_->preDraw(view, painter))
@@ -44,6 +34,10 @@ void CircuitViewController::keyPressEvent(CircuitView *view, QKeyEvent *event)
     if (!activeTool_->keyPressEvent(view, event))
         foreach(CircuitTool *tool, backgroundTools_)
             tool->keyPressEvent(view, event);
+
+    if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_X) {
+        deleteSelected(view);
+    }
 }
 
 void CircuitViewController::keyReleaseEvent(CircuitView *view, QKeyEvent *event)
@@ -67,7 +61,7 @@ void CircuitViewController::mousePressEvent(CircuitView *view, QMouseEvent *even
             tool->mousePressEvent(view, event);
 }
 
-void CircuitViewController::mouseReleaseEvent(CircuitView *view, QMouseEvent *event) // Execute before the last move event to get the velocity
+void CircuitViewController::mouseReleaseEvent(CircuitView *view, QMouseEvent *event)
 {
     if (!activeTool_->mouseReleaseEvent(view, event))
         foreach(CircuitTool *tool, backgroundTools_)
@@ -86,4 +80,19 @@ void CircuitViewController::touchEvent(CircuitView *view, QTouchEvent *event)
     if (!activeTool_->touchEvent(view, event))
         foreach(CircuitTool *tool, backgroundTools_)
             tool->touchEvent(view, event);
+}
+
+CircuitTool* CircuitViewController::activeTool() { return activeTool_; }
+void CircuitViewController::setActiveTool(CircuitTool *tool)
+{
+    if (activeTool_ != nullptr)
+        delete activeTool_;
+    activeTool_ = tool;
+}
+
+void CircuitViewController::deleteSelected(CircuitView *view)
+{
+    view->setUpdatesEnabled(false);
+    view->circuit()->deleteSelected();
+    view->setUpdatesEnabled(true);
 }

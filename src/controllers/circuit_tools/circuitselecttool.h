@@ -22,6 +22,7 @@ private:
     bool boxSelect_ = false;
     bool multiSelect_ = false;
     bool componentSelect_ = false;
+    bool altDrag_ = false;
 
 };
 

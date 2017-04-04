@@ -6,8 +6,9 @@ MainWindowToolBar::MainWindowToolBar(QWidget *parent) :
     setMovable(false);
     QSize iconSize(20, 20);
     setIconSize(iconSize);
-    addAction(IconLoader::load("mouse-pointer", iconSize), "Select Mode");
-    addAction(IconLoader::load("hand-paper-o", iconSize), "Select Mode");
-    addAction(IconLoader::load("search-plus", iconSize), "Select Mode");
-    addAction(IconLoader::load("search-minus", iconSize), "Select Mode");
+    addAction(IconLoader::load("mouse-pointer", iconSize), "Select");
+    addAction(IconLoader::load("resistor", iconSize), "Wiring");
+    addAction(IconLoader::load("hand-paper-o", iconSize), "Pan");
+    addAction(IconLoader::load("search-plus", iconSize), "Zoom In");
+    addAction(IconLoader::load("search-minus", iconSize), "Zoom Out");
 }

@@ -14,5 +14,7 @@
         <file>png/gates.png</file>
         <file>png/gates_accent.png</file>
         <file>png/3_way_switch_right.png</file>
+        <file>svg/3_way_switch_right.svg</file>
+        <file>svg/resistor.svg</file>
     </qresource>
 </RCC>

@@ -45,7 +45,8 @@ signals:
 
 public slots:
     void setActiveTool(CircuitTool *tool);
-    void setActiveTool(CircuitTool::Tool tool);
+
+    void deleteSelected(CircuitView *view);
 };
 
 #endif // CIRCUITVIEWCONTROLLER_H

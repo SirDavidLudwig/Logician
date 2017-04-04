@@ -164,3 +164,4 @@ QPen CircuitComponent::pen()
     pen.setWidth(2);
     return pen;
 }
+

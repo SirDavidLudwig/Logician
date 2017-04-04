@@ -68,6 +68,18 @@ bool CircuitSelectTool::mouseMoveEvent(CircuitView *view, QMouseEvent *event)
         QVector2D anchorDelta(QPointF(round(anchorEnd_.x() - anchorStart_.x()), round(anchorEnd_.y() - anchorStart_.y())));
         if (anchorDelta != lastAnchorDelta) {
             view->setUpdatesEnabled(false);
+
+            // Alt drag duplication (stuck at the moment)
+//            if (altDrag_) {
+//                CircuitComponent *newComponent;
+//                foreach(CircuitComponent *component, view->circuit()->selectedComponents()) {
+//                    newComponent = new CircuitComponent(*component);
+//                    view->circuit()->addComponent(newComponent);
+//                    view->circuit()->deselectComponent(newComponent);
+//                }
+//                altDrag_ = false;
+//            }
+
             foreach(CircuitComponent *component, view->circuit()->selectedComponents()) {
                 component->setPosition(component->markedPosition() + anchorDelta.toPointF());
             }
@@ -83,7 +95,6 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
 {
     CircuitComponent *component;
 
-
     if (event->button() == Qt::LeftButton) {
 
         anchorStart_ = view->mapToCoordinate(view->toScreen(event->pos()));
@@ -97,10 +108,15 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
 
         if (event->modifiers() & Qt::ShiftModifier) {
             multiSelect_ = true;
+
             if (component != nullptr) {
                 view->circuit()->toggleSelectComponent(component);
                 if (component->isSelected()) {
                     componentSelect_ = true;
+
+                    if (event->modifiers() & Qt::AltModifier)
+                        altDrag_ = true;
+
                     foreach (CircuitComponent *component, view->circuit()->selectedComponents())
                         component->markPosition();
                 }
@@ -112,6 +128,10 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
                     view->circuit()->deselectAll(false); // Deselect all, but don't repaint just yet
                 view->circuit()->selectComponent(component, false);
                 componentSelect_ = true;
+
+                if (event->modifiers() & Qt::AltModifier)
+                    altDrag_ = true;
+
                 foreach (CircuitComponent *component, view->circuit()->selectedComponents())
                     component->markPosition();
             } else {

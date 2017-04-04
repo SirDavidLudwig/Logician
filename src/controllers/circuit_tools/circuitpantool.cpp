@@ -25,6 +25,7 @@ bool CircuitPanTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
 
     if (event->button() == panButton_) {
         dragging_ = true;
+        view->setCursor(Qt::ClosedHandCursor);
         view->setPositionFalloffEnabled(!(dragging_ || touchDragging_));
         view->setPositionVelocity(0, 0);
         result = true;
@@ -40,6 +41,7 @@ bool CircuitPanTool::mouseReleaseEvent(CircuitView *view, QMouseEvent *event) //
 {
     if (event->button() == panButton_) {
         dragging_ = false;
+        view->setCursor(Qt::ArrowCursor);
         view->setPositionFalloffEnabled(!(dragging_ || touchDragging_));
 
         mousePos_.setX(double(event->pos().x()) / view->width());
@@ -53,6 +55,9 @@ bool CircuitPanTool::mouseReleaseEvent(CircuitView *view, QMouseEvent *event) //
 
 bool CircuitPanTool::wheelEvent(CircuitView *view, QWheelEvent *event)
 {
+    if (event->angleDelta().y() == 0)
+        return false;
+
     int direction = event->angleDelta().y() / -abs(event->angleDelta().y());
     view->setZoom(view->zoom() - view->zoom() * 0.1 * direction, view->toScreen(event->pos()));
     return true;

@@ -69,8 +69,9 @@ void Circuit::selectComponent(CircuitComponent *component, bool repaint)
 
 void Circuit::deselectComponent(CircuitComponent *component, bool repaint)
 {
+    component->setSelected(false);
+
     if (selectedComponents_.contains(component)) {
-        component->setSelected(false);
         selectedComponents_.removeOne(component);
     }
 
@@ -87,6 +88,14 @@ void Circuit::toggleSelectComponent(CircuitComponent *component, bool repaint)
 
     if (repaint)
         emit updated();
+}
+
+void Circuit::deleteSelected()
+{
+    foreach (CircuitComponent *component, selectedComponents_) {
+        removeComponent(component);
+    }
+    selectedComponents_.clear();
 }
 
 void Circuit::update()
