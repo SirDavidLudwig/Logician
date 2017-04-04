@@ -40,6 +40,8 @@ public:
 
     QRectF boundingBox();
 
+    QPointF markedPosition();
+
     QPointF position();
     Orientation orientation();
 
@@ -73,6 +75,7 @@ private:
     bool selected_;
     QRectF boundingBox_;
     Orientation orientation_;
+    QPointF markedPosition_;
     QPointF position_;
 
     double pixelsPerUnit_;
@@ -86,6 +89,8 @@ signals:
     void updated();
 
 public slots:
+    void markPosition();
+
     void setPosition(QPointF position);
     void setOrientation(Orientation orientation);
 

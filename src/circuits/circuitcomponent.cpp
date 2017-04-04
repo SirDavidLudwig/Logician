@@ -96,6 +96,9 @@ void CircuitComponent::setBoundingBox(QRectF bounds)
     boundingBox_ = tBounds;
 }
 
+QPointF CircuitComponent::markedPosition() { return markedPosition_; }
+void CircuitComponent::markPosition() { markedPosition_ = position_; }
+
 QPointF CircuitComponent::position() { return position_; }
 void CircuitComponent::setPosition(QPointF position) { position_ = position; update(); }
 

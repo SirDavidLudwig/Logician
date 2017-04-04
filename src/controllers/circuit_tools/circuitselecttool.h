@@ -10,6 +10,7 @@ public:
 
     bool draw(CircuitView *view, QPainter &painter);
 
+    bool keyPressEvent(CircuitView *view, QKeyEvent *event);
     bool mouseMoveEvent(CircuitView *view, QMouseEvent *event);
     bool mousePressEvent(CircuitView *view, QMouseEvent *event);
     bool mouseReleaseEvent(CircuitView *view, QMouseEvent *event);
@@ -18,8 +19,10 @@ private:
     QPointF anchorStart_;
     QPointF anchorEnd_;
 
-    bool boxSelect_;
-    bool multiSelect_;
+    bool boxSelect_ = false;
+    bool multiSelect_ = false;
+    bool componentSelect_ = false;
+
 };
 
 #endif // CIRCUITSELECTTOOL_H

@@ -20,6 +20,9 @@ namespace Math
 
     double radians(double degrees);
     double degrees(double radians);
+
+    double absFloor(double value);
+    double absCeil(double value);
 }
 
 #endif // MATH_H

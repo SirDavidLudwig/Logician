@@ -86,8 +86,8 @@ private:
     Circuit *circuit_;
     CircuitViewController *controller_;
 
-    bool active_;
-    bool touchDragging_;
+    bool active_ = false;
+    bool touchDragging_ = false;
     bool isPositionFalloffEnabled_ = true;
 
     QVector2D lastPositionVelocity_;
