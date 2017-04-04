@@ -1,5 +1,5 @@
 #include "circuitaddcomponenttool.h"
-#include "../../widgets/circuitview.h"
+#include "../../../widgets/circuitview.h"
 
 CircuitAddComponentTool::CircuitAddComponentTool(CircuitComponent *component) :
     CircuitTool(AddComponentTool)

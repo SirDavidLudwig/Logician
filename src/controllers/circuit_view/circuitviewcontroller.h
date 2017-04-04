@@ -8,6 +8,7 @@
 #include <QTouchEvent>
 #include <QWheelEvent>
 
+#include "../controller.h"
 #include "circuit_tools/circuittool.h"
 #include "circuit_tools/circuitaddcomponenttool.h"
 #include "circuit_tools/circuitpantool.h"
@@ -16,7 +17,7 @@
 
 class CircuitView;
 
-class CircuitViewController : public QObject
+class CircuitViewController : public Controller
 {
     Q_OBJECT
 public:

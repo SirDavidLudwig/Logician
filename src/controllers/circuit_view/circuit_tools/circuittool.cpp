@@ -1,5 +1,5 @@
 #include "circuittool.h"
-#include "../../widgets/circuitview.h"
+#include "../../../widgets/circuitview.h"
 
 CircuitTool::CircuitTool(Tool tool) :
     tool_(tool)

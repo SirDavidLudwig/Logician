@@ -1,8 +1,8 @@
 #include "circuitviewcontroller.h"
-#include "../widgets/circuitview.h"
+#include "../../widgets/circuitview.h"
 
 CircuitViewController::CircuitViewController() :
-    QObject()
+    Controller(Controller::CircuitViewController)
 {
     // Background tools
     backgroundTools_.append(new CircuitPanTool(Qt::MiddleButton));

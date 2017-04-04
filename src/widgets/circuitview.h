@@ -24,7 +24,7 @@
 
 #include "../circuits/circuit.h"
 #include "../circuits/circuitcomponent.h"
-#include "../controllers/circuitviewcontroller.h"
+#include "../controllers/circuit_view/circuitviewcontroller.h"
 #include "../utils/math.h"
 
 

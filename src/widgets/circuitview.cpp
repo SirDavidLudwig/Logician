@@ -1,4 +1,5 @@
 #include "circuitview.h"
+#include "../gui/mainwindow.h"
 
 CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     QWidget(parent)
@@ -10,8 +11,6 @@ CircuitView::CircuitView(QWidget *parent, Circuit *circuit) :
     zoom_ = MAX_ZOOM / 6;
 
     setFocusPolicy(Qt::StrongFocus);
-
-    setController(new CircuitViewController());
     setCircuit(circuit);
 }
 
@@ -37,36 +36,57 @@ bool CircuitView::event(QEvent *event)
 
 void CircuitView::keyPressEvent(QKeyEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->keyPressEvent(this, event);
 }
 
 void CircuitView::keyReleaseEvent(QKeyEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->keyReleaseEvent(this, event);
 }
 
 void CircuitView::mouseMoveEvent(QMouseEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->mouseMoveEvent(this, event);
 }
 
 void CircuitView::mousePressEvent(QMouseEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->mousePressEvent(this, event);
 }
 
 void CircuitView::mouseReleaseEvent(QMouseEvent *event) // Execute before the last move event to get the velocity
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->mouseReleaseEvent(this, event);
 }
 
 void CircuitView::wheelEvent(QWheelEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->wheelEvent(this, event);
 }
 
 void CircuitView::touchEvent(QTouchEvent *event)
 {
+    if (controller_ == nullptr)
+        return;
+
     controller_->touchEvent(this, event);
 }
 
@@ -97,12 +117,14 @@ void CircuitView::paintEvent(QPaintEvent *event)
     QFont font("Tahoma", 15);
     painter.setFont(font);
 
-    controller_->preDraw(this, painter);
+    if (controller_ != nullptr)
+        controller_->preDraw(this, painter);
 
     drawGrid(event, painter);
     drawComponents(event, painter);
 
-    controller_->draw(this, painter);
+    if (controller_ != nullptr)
+        controller_->draw(this, painter);
 
     painter.end();
 

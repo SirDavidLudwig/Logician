@@ -22,18 +22,20 @@ HEADERS += \
     src/widgets/mainwindowmenubar.h \
     src/widgets/mainwindowtoolbar.h \
     src/widgets/mainwindowui.h \
-    src/controllers/circuitviewcontroller.h \
-	src/controllers/circuit_tools/circuittool.h \
-    src/controllers/circuit_tools/circuitselecttool.h \
-    src/controllers/circuit_tools/circuitaddcomponenttool.h \
-    src/controllers/circuit_tools/circuitwiringtool.h \
-    src/controllers/circuit_tools/circuitpantool.h \
+	src/controllers/controller.h \
+	src/controllers/circuit_view/circuitviewcontroller.h \
+	src/controllers/circuit_view/circuit_tools/circuittool.h \
+	src/controllers/circuit_view/circuit_tools/circuitselecttool.h \
+	src/controllers/circuit_view/circuit_tools/circuitaddcomponenttool.h \
+	src/controllers/circuit_view/circuit_tools/circuitwiringtool.h \
+	src/controllers/circuit_view/circuit_tools/circuitpantool.h \
     src/circuits/gates/orgate.h \
     src/circuits/gates/notgate.h \
     src/circuits/gates/nandgate.h \
     src/circuits/gates/norgate.h \
     src/circuits/gates/xorgate.h \
-    src/circuits/gates/xnorgate.h
+	src/circuits/gates/xnorgate.h \
+    src/controllers/controllermanager.h
 
 SOURCES += \
     src/main.cpp \
@@ -55,18 +57,20 @@ SOURCES += \
     src/widgets/mainwindowmenubar.cpp \
     src/widgets/mainwindowtoolbar.cpp \
     src/widgets/mainwindowui.cpp \
-    src/controllers/circuitviewcontroller.cpp \
-	src/controllers/circuit_tools/circuittool.cpp \
-    src/controllers/circuit_tools/circuitselecttool.cpp \
-    src/controllers/circuit_tools/circuitaddcomponenttool.cpp \
-    src/controllers/circuit_tools/circuitwiringtool.cpp \
-    src/controllers/circuit_tools/circuitpantool.cpp \
+	src/controllers/controller.cpp \
+	src/controllers/circuit_view/circuitviewcontroller.cpp \
+	src/controllers/circuit_view/circuit_tools/circuittool.cpp \
+	src/controllers/circuit_view/circuit_tools/circuitselecttool.cpp \
+	src/controllers/circuit_view/circuit_tools/circuitaddcomponenttool.cpp \
+	src/controllers/circuit_view/circuit_tools/circuitwiringtool.cpp \
+	src/controllers/circuit_view/circuit_tools/circuitpantool.cpp \
     src/circuits/gates/orgate.cpp \
     src/circuits/gates/notgate.cpp \
     src/circuits/gates/nandgate.cpp \
     src/circuits/gates/norgate.cpp \
     src/circuits/gates/xorgate.cpp \
-    src/circuits/gates/xnorgate.cpp
+	src/circuits/gates/xnorgate.cpp \
+    src/controllers/controllermanager.cpp
 
 RESOURCES += \
     resources/resources.qrc

@@ -3,6 +3,8 @@
 
 #include <QDockWidget>
 #include <QMainWindow>
+
+#include "../controllers/circuit_view/circuitviewcontroller.h"
 #include "../widgets/assetbrowser.h"
 #include "../widgets/mainwindowmenubar.h"
 #include "../widgets/mainwindowtoolbar.h"

@@ -2,7 +2,7 @@
 #define CIRCUITADDCOMPONENTTOOL_H
 
 #include "circuittool.h"
-#include "../../circuits/circuitcomponent.h"
+#include "../../../circuits/circuitcomponent.h"
 
 class CircuitAddComponentTool: public CircuitTool
 {

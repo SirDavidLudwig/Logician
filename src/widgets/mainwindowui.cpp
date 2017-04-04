@@ -1,4 +1,5 @@
 #include "mainwindowui.h"
+#include "../gui/mainwindow.h"
 
 MainWindowUi::MainWindowUi(QWidget *parent) :
     QTabWidget(parent)
@@ -6,8 +7,17 @@ MainWindowUi::MainWindowUi(QWidget *parent) :
     lastTab_ = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(onTabChange(int)));
 
-    addTab(new CircuitView(this, new Circuit()), "Untitled 1");
-    addTab(new CircuitView(this, new Circuit()), "Untitled 2");
+    addCircuit(new Circuit("My circuit"));
+}
+
+void MainWindowUi::addCircuit(Circuit *circuit)
+{
+    Controller *controller = ControllerManager::controller(window());
+
+    CircuitView *view = new CircuitView(this, circuit);
+    view->setController((CircuitViewController*) controller);
+
+    addTab(view, circuit->name());
 }
 
 void MainWindowUi::onTabChange(int index)

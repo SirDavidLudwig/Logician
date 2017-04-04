@@ -1,5 +1,5 @@
 #include "circuitpantool.h"
-#include "../../widgets/circuitview.h"
+#include "../../../widgets/circuitview.h"
 
 CircuitPanTool::CircuitPanTool(Qt::MouseButton button) :
     CircuitTool(PanTool)

@@ -1,8 +1,10 @@
 #include "circuit.h"
 
-Circuit::Circuit() :
+Circuit::Circuit(QString name) :
     QObject()
 {
+    name_ = name;
+
 //    addComponent(new InputPin());
     addComponent(new XnorGate(QPointF(0, 15), CircuitComponent::East));
     addComponent(new AndGate(QPointF(0, 10), CircuitComponent::East));
@@ -11,6 +13,13 @@ Circuit::Circuit() :
     addComponent(new NorGate(QPointF(0, -5), CircuitComponent::East));
     addComponent(new NotGate(QPointF(0, -10), CircuitComponent::East));
     addComponent(new XorGate(QPointF(0, -15), CircuitComponent::East));
+}
+
+QString Circuit::name() { return name_; }
+void Circuit::setName(QString name)
+{
+    name_ = name;
+    emit nameChanged(name);
 }
 
 QList<CircuitComponent*> Circuit::components() { return components_; }

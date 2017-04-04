@@ -21,16 +21,22 @@ class Circuit : public QObject
     Q_OBJECT
 public:
 
-    Circuit();
+    Circuit(QString name = "Untitled");
+
+    QString name();
+    void setName(QString name);
 
     QList<CircuitComponent*> components();
     QList<CircuitComponent*> selectedComponents();
 
 private:
+    QString name_;
+
     QList<CircuitComponent*> components_;
     QList<CircuitComponent*> selectedComponents_;
 
 signals:
+    void nameChanged(QString);
     void updated();
 
 public slots:

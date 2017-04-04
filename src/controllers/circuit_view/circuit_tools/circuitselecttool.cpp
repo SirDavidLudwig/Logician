@@ -1,5 +1,5 @@
 #include "circuitselecttool.h"
-#include "../../widgets/circuitview.h"
+#include "../../../widgets/circuitview.h"
 
 CircuitSelectTool::CircuitSelectTool() :
     CircuitTool(SelectTool)
