@@ -9,7 +9,7 @@ CircuitSelectTool::CircuitSelectTool() :
 
 bool CircuitSelectTool::draw(CircuitView *view, QPainter &painter)
 {
-    if (boxSelect_) {
+    if (boxSelecting_) {
         painter.setRenderHint(QPainter::Antialiasing, false);
 
         QPen pen(Qt::red);
@@ -26,6 +26,57 @@ bool CircuitSelectTool::draw(CircuitView *view, QPainter &painter)
         painter.drawRect(rect);
     }
     return false;
+}
+
+void CircuitSelectTool::boxSelectStartEvent(CircuitView *view, QMouseEvent *event) {}
+void CircuitSelectTool::boxSelectEndEvent(CircuitView *view, QMouseEvent *event)
+{
+    QRectF rect = QRectF(anchorStart_, anchorEnd_).normalized();
+
+    if (multiSelect_)
+        foreach (CircuitComponent *component, view->circuit()->components()) {
+            if (rect.intersects(component->boundingBox()))
+                view->circuit()->toggleSelectComponent(component, false);
+        }
+
+    else
+        foreach (CircuitComponent *component, view->circuit()->components()) {
+            if (rect.intersects(component->boundingBox()))
+                view->circuit()->selectComponent(component, false);
+        }
+
+    boxSelecting_ = false; // Don't draw the box select thing on repaint
+    view->repaint();
+}
+
+void CircuitSelectTool::componentMoveDragEvent(CircuitView *view, QMouseEvent *event)
+{
+    static QVector2D lastAnchorDelta(0, 0);
+
+    QVector2D anchorDelta = anchorDeltaRounded();
+    if (anchorDelta != lastAnchorDelta) {
+        view->setUpdatesEnabled(false);
+
+        foreach(CircuitComponent *component, view->circuit()->selectedComponents()) {
+            component->setPosition(component->markedPosition() + anchorDelta.toPointF());
+        }
+        view->setUpdatesEnabled(true);
+    }
+    lastAnchorDelta = anchorDelta;
+}
+
+void CircuitSelectTool::componentMoveEndEvent(CircuitView *view, QMouseEvent *event)
+{
+    foreach (CircuitComponent *component, view->circuit()->selectedComponents()) {
+        component->setPosition(component->markedPosition(), false);
+    }
+
+    view->circuit()->executeOperation(new MoveComponentOperation(view->circuit()->selectedComponents(), anchorDeltaRounded()));
+}
+
+void CircuitSelectTool::componentPressEvent(CircuitView *view, CircuitComponent *component, QMouseEvent *event)
+{
+
 }
 
 bool CircuitSelectTool::keyPressEvent(CircuitView *view, QKeyEvent *event)
@@ -59,33 +110,14 @@ bool CircuitSelectTool::keyPressEvent(CircuitView *view, QKeyEvent *event)
 
 bool CircuitSelectTool::mouseMoveEvent(CircuitView *view, QMouseEvent *event)
 {
-    static QVector2D lastAnchorDelta(0, 0);
+    // Update the anchor
     anchorEnd_ = view->mapToCoordinate(view->toScreen(event->pos()));
 
-    if (boxSelect_) {
+    // Send events to appropriate methods
+    if (boxSelecting_) {
         view->repaint();
-    } else if (componentSelect_) {
-        QVector2D anchorDelta(QPointF(round(anchorEnd_.x() - anchorStart_.x()), round(anchorEnd_.y() - anchorStart_.y())));
-        if (anchorDelta != lastAnchorDelta) {
-            view->setUpdatesEnabled(false);
-
-            // Alt drag duplication (stuck at the moment)
-//            if (altDrag_) {
-//                CircuitComponent *newComponent;
-//                foreach(CircuitComponent *component, view->circuit()->selectedComponents()) {
-//                    newComponent = new CircuitComponent(*component);
-//                    view->circuit()->addComponent(newComponent);
-//                    view->circuit()->deselectComponent(newComponent);
-//                }
-//                altDrag_ = false;
-//            }
-
-            foreach(CircuitComponent *component, view->circuit()->selectedComponents()) {
-                component->setPosition(component->markedPosition() + anchorDelta.toPointF());
-            }
-            view->setUpdatesEnabled(true);
-        }
-        lastAnchorDelta = anchorDelta;
+    } else if (componentPressed_) {
+        componentMoveDragEvent(view, event);
     }
 
     return false;
@@ -103,7 +135,7 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
         component = view->componentAt(anchorStart_);
 
         if (component == nullptr) {
-            boxSelect_ = true;
+            boxSelecting_ = true;
         }
 
         if (event->modifiers() & Qt::ShiftModifier) {
@@ -112,7 +144,7 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
             if (component != nullptr) {
                 view->circuit()->toggleSelectComponent(component);
                 if (component->isSelected()) {
-                    componentSelect_ = true;
+                    componentPressed_ = true;
 
                     if (event->modifiers() & Qt::AltModifier)
                         altDrag_ = true;
@@ -127,7 +159,7 @@ bool CircuitSelectTool::mousePressEvent(CircuitView *view, QMouseEvent *event)
                 if (!component->isSelected())
                     view->circuit()->deselectAll(false); // Deselect all, but don't repaint just yet
                 view->circuit()->selectComponent(component, false);
-                componentSelect_ = true;
+                componentPressed_ = true;
 
                 if (event->modifiers() & Qt::AltModifier)
                     altDrag_ = true;
@@ -147,29 +179,26 @@ bool CircuitSelectTool::mouseReleaseEvent(CircuitView *view, QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
 
-        componentSelect_ = false;
+        if (componentPressed_)
+            componentMoveEndEvent(view, event);
 
-        if (boxSelect_) {
-            boxSelect_ = false;
+        else if (boxSelecting_)
+            boxSelectEndEvent(view, event);
 
-            QRectF rect = QRectF(anchorStart_, anchorEnd_).normalized();
-
-            if (multiSelect_)
-                foreach (CircuitComponent *component, view->circuit()->components()) {
-                    if (rect.intersects(component->boundingBox()))
-                        view->circuit()->toggleSelectComponent(component, false);
-                }
-
-            else
-                foreach (CircuitComponent *component, view->circuit()->components()) {
-                    if (rect.intersects(component->boundingBox()))
-                        view->circuit()->selectComponent(component, false);
-                }
-
-            view->repaint();
-        }
-        boxSelect_ = false;
+        // Reset everything
+        componentPressed_ = false;
+        boxSelecting_ = false;
         multiSelect_ = false;
     }
     return false;
+}
+
+QVector2D CircuitSelectTool::anchorDelta()
+{
+    return QVector2D(anchorEnd_.x() - anchorStart_.x(), anchorEnd_.y() - anchorStart_.y());
+}
+
+QVector2D CircuitSelectTool::anchorDeltaRounded()
+{
+    return QVector2D(round(anchorEnd_.x() - anchorStart_.x()), round(anchorEnd_.y() - anchorStart_.y()));
 }

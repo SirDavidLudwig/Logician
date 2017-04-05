@@ -100,7 +100,7 @@ QPointF CircuitComponent::markedPosition() { return markedPosition_; }
 void CircuitComponent::markPosition() { markedPosition_ = position_; }
 
 QPointF CircuitComponent::position() { return position_; }
-void CircuitComponent::setPosition(QPointF position) { position_ = position; update(); }
+void CircuitComponent::setPosition(QPointF position, bool doUpdate) { position_ = position; if (doUpdate) update(); }
 
 void CircuitComponent::update() { emit updated(); }
 

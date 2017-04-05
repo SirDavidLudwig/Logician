@@ -91,7 +91,7 @@ signals:
 public slots:
     void markPosition();
 
-    void setPosition(QPointF position);
+    void setPosition(QPointF position, bool doUpdate = true);
     void setOrientation(Orientation orientation);
 
     void prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit);

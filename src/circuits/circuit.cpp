@@ -108,14 +108,33 @@ void Circuit::deleteSelected()
     selectedComponents_.clear();
 }
 
-bool Circuit::undo()
+bool Circuit::undoOperation()
 {
-    return false;
+    Operation *operation = undoRedoStack_->undo();
+    if (operation == nullptr)
+        return false;
+
+    operation->revert(this);
+    update();
+    return true;
 }
 
-bool Circuit::redo()
+bool Circuit::redoOperation()
 {
-    return false;
+    Operation *operation = undoRedoStack_->redo();
+    if (operation == nullptr)
+        return false;
+
+    operation->execute(this);
+    update();
+    return true;
+}
+
+void Circuit::executeOperation(Operation *operation)
+{
+    operation->execute(this);
+    undoRedoStack_->push(operation);
+    update();
 }
 
 void Circuit::update()

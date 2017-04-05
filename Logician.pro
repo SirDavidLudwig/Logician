@@ -35,8 +35,9 @@ HEADERS += \
     src/circuits/gates/norgate.h \
     src/circuits/gates/xorgate.h \
 	src/circuits/gates/xnorgate.h \
-    src/core/undoredostack.h \
-    src/core/operations/operation.h
+	src/core/operations/undoredostack.h \
+	src/core/operations/operation.h \
+	src/core/operations/circuit/movecomponentoperation.h
 
 SOURCES += \
     src/main.cpp \
@@ -71,8 +72,9 @@ SOURCES += \
     src/circuits/gates/norgate.cpp \
     src/circuits/gates/xorgate.cpp \
 	src/circuits/gates/xnorgate.cpp \
-    src/core/undoredostack.cpp \
-    src/core/operations/operation.cpp
+	src/core/operations/undoredostack.cpp \
+	src/core/operations/operation.cpp \
+	src/core/operations/circuit/movecomponentoperation.cpp
 
 RESOURCES += \
     resources/resources.qrc

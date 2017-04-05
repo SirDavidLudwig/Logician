@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QObject>
 
-#include "../core/undoredostack.h"
+#include "../core/operations/undoredostack.h"
 #include "../core/operations/operation.h"
 
 #include "circuitcomponent.h"
@@ -57,8 +57,9 @@ public slots:
 
     void deleteSelected();
 
-    bool undo();
-    bool redo();
+    bool redoOperation();
+    bool undoOperation();
+    void executeOperation(Operation *operation);
 
     void update();
 };

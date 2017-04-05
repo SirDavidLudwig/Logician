@@ -38,6 +38,13 @@ void CircuitViewController::keyPressEvent(CircuitView *view, QKeyEvent *event)
     if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_X) {
         deleteSelected(view);
     }
+
+    // Temporary keyboard shortcut things...
+    if (event->key() == Qt::Key_Z && event->modifiers() == Qt::ControlModifier)
+        view->circuit()->undoOperation();
+
+    else if (event->key() == Qt::Key_Z && event->modifiers() == Qt::ControlModifier | Qt::ShiftModifier)
+        view->circuit()->redoOperation();
 }
 
 void CircuitViewController::keyReleaseEvent(CircuitView *view, QKeyEvent *event)

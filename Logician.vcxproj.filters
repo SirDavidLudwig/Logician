@@ -128,9 +128,6 @@
     <ClCompile Include="src\circuits\gates\notgate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\operations\operation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\circuits\gates\orgate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -283,6 +280,9 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_resources.cpp">
       <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\operations\circuit\movecomponentoperation.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,5 +446,10 @@
     <None Include="resources\svg\search.svg">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\core\operations\circuit\movecomponentoperation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
