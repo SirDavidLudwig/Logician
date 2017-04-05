@@ -4,6 +4,9 @@
 #include <QDebug>
 #include <QObject>
 
+#include "../core/undoredostack.h"
+#include "../core/operations/operation.h"
+
 #include "circuitcomponent.h"
 
 #include "inputs/inputpin.h"
@@ -35,6 +38,8 @@ private:
     QList<CircuitComponent*> components_;
     QList<CircuitComponent*> selectedComponents_;
 
+    UndoRedoStack *undoRedoStack_;
+
 signals:
     void nameChanged(QString);
     void updated();
@@ -51,6 +56,9 @@ public slots:
     void toggleSelectComponent(CircuitComponent *component, bool repaint = true);
 
     void deleteSelected();
+
+    bool undo();
+    bool redo();
 
     void update();
 };

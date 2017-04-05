@@ -4,6 +4,7 @@ Circuit::Circuit(QString name) :
     QObject()
 {
     name_ = name;
+    undoRedoStack_ = new UndoRedoStack();
 
 //    addComponent(new InputPin());
     addComponent(new XnorGate(QPointF(0, 15), CircuitComponent::East));
@@ -105,6 +106,16 @@ void Circuit::deleteSelected()
         removeComponent(component);
     }
     selectedComponents_.clear();
+}
+
+bool Circuit::undo()
+{
+    return false;
+}
+
+bool Circuit::redo()
+{
+    return false;
 }
 
 void Circuit::update()

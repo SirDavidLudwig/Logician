@@ -14,11 +14,14 @@
 class Application : public QApplication
 {
 public:
+    static Application* instance();
+
     Application(int argc, char *argv[]);
 
     MainWindow* mainWindow();
 
 private:
+    static Application* instance_;
     MainWindow *mainWindow_;
 
 public slots:

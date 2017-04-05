@@ -13,5 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
     setMenuBar(menuBar_);
 
     ui_ = new MainWindowUi(this);
+    ui_->setController(new CircuitViewController());
     setCentralWidget(ui_);
+
+    ui_->addCircuit(new Circuit("My circuit"));
+}
+
+void MainWindow::setCircuitViewController(CircuitViewController *controller)
+{
+    ui_->setController(controller);
 }

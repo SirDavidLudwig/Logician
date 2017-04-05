@@ -6,16 +6,12 @@ MainWindowUi::MainWindowUi(QWidget *parent) :
 {
     lastTab_ = -1;
     connect(this, SIGNAL(currentChanged(int)), this, SLOT(onTabChange(int)));
-
-    addCircuit(new Circuit("My circuit"));
 }
 
 void MainWindowUi::addCircuit(Circuit *circuit)
 {
-    Controller *controller = ControllerManager::controller(window());
-
     CircuitView *view = new CircuitView(this, circuit);
-    view->setController((CircuitViewController*) controller);
+    view->setController((CircuitViewController*) controller_);
 
     addTab(view, circuit->name());
 }
@@ -33,4 +29,11 @@ void MainWindowUi::onTabChange(int index)
 void MainWindowUi::tabInserted(int index)
 {
     setCurrentIndex(index);
+}
+
+void MainWindowUi::setController(CircuitViewController *controller)
+{
+    controller_ = controller;
+    for (int i = 0; i < count(); i++)
+        ((CircuitView*) widget(i))->setController(controller);
 }

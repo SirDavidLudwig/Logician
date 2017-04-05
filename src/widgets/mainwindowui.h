@@ -5,7 +5,6 @@
 #include <QWidget>
 
 #include "circuitview.h"
-#include "../controllers/controllermanager.h"
 
 class MainWindow;
 
@@ -15,9 +14,13 @@ class MainWindowUi : public QTabWidget
 public:
     MainWindowUi(QWidget *parent = 0);
 
+    void setController(CircuitViewController *controller);
+
 private:
     MainWindow *mainWindow_;
     int lastTab_;
+
+    CircuitViewController *controller_;
 
 signals:
 

@@ -1,9 +1,14 @@
 #include "application.h"
 
+Application* Application::instance_ = nullptr;
+Application* Application::instance() { return Application::instance_; }
 
 Application::Application(int argc, char *argv[]) :
     QApplication(argc, argv)
 {
+    // Save an instance of the app
+    Application::instance_ = this;
+
     styleApp();
 
     mainWindow_ = new MainWindow();

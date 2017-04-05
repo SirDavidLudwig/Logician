@@ -16,6 +16,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
 
+    void setCircuitViewController(CircuitViewController *controller);
+
 private:
     AssetBrowser *browser_;
     MainWindowMenuBar *menuBar_;
