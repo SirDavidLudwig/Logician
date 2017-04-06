@@ -92,7 +92,7 @@ public slots:
     void markPosition();
 
     void setPosition(QPointF position, bool doUpdate = true);
-    void setOrientation(Orientation orientation);
+    void setOrientation(Orientation orientation, bool doUpdate = true);
 
     void prepareDraw(QPainter &painter, QPointF position, QSize screen, double pixelsPerUnit);
     void update();

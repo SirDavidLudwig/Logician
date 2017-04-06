@@ -39,6 +39,16 @@ void CircuitViewController::keyPressEvent(CircuitView *view, QKeyEvent *event)
         deleteSelected(view);
     }
 
+    // Temporary key orientation stuff...
+    if (event->key() == Qt::Key_Up)
+        orientSelected(view, CircuitComponent::North);
+    else if (event->key() == Qt::Key_Down)
+        orientSelected(view, CircuitComponent::South);
+    else if (event->key() == Qt::Key_Left)
+        orientSelected(view, CircuitComponent::West);
+    else if (event->key() == Qt::Key_Right)
+        orientSelected(view, CircuitComponent::East);
+
     // Temporary keyboard shortcut things...
     if (event->key() == Qt::Key_Z && event->modifiers() == Qt::ControlModifier)
         view->circuit()->undoOperation();
@@ -52,6 +62,9 @@ void CircuitViewController::keyReleaseEvent(CircuitView *view, QKeyEvent *event)
     if (!activeTool_->keyReleaseEvent(view, event))
         foreach(CircuitTool *tool, backgroundTools_)
             tool->keyReleaseEvent(view, event);
+
+    if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_X)
+        deleteSelected(view);
 }
 
 void CircuitViewController::mouseMoveEvent(CircuitView *view, QMouseEvent *event)
@@ -99,7 +112,10 @@ void CircuitViewController::setActiveTool(CircuitTool *tool)
 
 void CircuitViewController::deleteSelected(CircuitView *view)
 {
-    view->setUpdatesEnabled(false);
-    view->circuit()->deleteSelected();
-    view->setUpdatesEnabled(true);
+    view->circuit()->executeOperation(new RemoveComponentOperation(view->circuit()->selectedComponents()));
+}
+
+void CircuitViewController::orientSelected(CircuitView *view, CircuitComponent::Orientation orientation)
+{
+    view->circuit()->executeOperation(new ComponentOrientOperation(view->circuit()->selectedComponents(), orientation));
 }

@@ -69,7 +69,7 @@ bool CircuitComponent::isSelected() { return selected_; }
 void CircuitComponent::setSelected(bool selected) { selected_ = selected; }
 
 CircuitComponent::Orientation CircuitComponent::orientation() { return orientation_; }
-void CircuitComponent::setOrientation(Orientation orientation) { orientation_ = orientation; update(); }
+void CircuitComponent::setOrientation(Orientation orientation, bool doUpdate) { orientation_ = orientation; if(doUpdate) update(); }
 
 QRectF CircuitComponent::boundingBox() { return boundingBox_; }
 void CircuitComponent::setBoundingBox(QRectF bounds)

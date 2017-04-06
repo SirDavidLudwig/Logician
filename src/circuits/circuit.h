@@ -45,17 +45,15 @@ signals:
     void updated();
 
 public slots:
-    bool addComponent(CircuitComponent *component);
-    bool removeComponent(CircuitComponent *component);
+    bool addComponent(CircuitComponent *component, bool update = true);
+    bool removeComponent(CircuitComponent *component, bool update = true);
 
-    void selectAll(bool repaint = true);
-    void deselectAll(bool repaint = true);
+    void selectAll(bool update = true);
+    void deselectAll(bool update = true);
 
-    void selectComponent(CircuitComponent *component, bool repaint = true);
-    void deselectComponent(CircuitComponent *component, bool repaint = true);
-    void toggleSelectComponent(CircuitComponent *component, bool repaint = true);
-
-    void deleteSelected();
+    void selectComponent(CircuitComponent *component, bool update = true);
+    void deselectComponent(CircuitComponent *component, bool update = true);
+    void toggleSelectComponent(CircuitComponent *component, bool update = true);
 
     bool redoOperation();
     bool undoOperation();

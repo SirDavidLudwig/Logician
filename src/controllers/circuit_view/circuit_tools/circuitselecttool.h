@@ -12,7 +12,6 @@ public:
 
     bool draw(CircuitView *view, QPainter &painter);
 
-    bool keyPressEvent(CircuitView *view, QKeyEvent *event);
     bool mouseMoveEvent(CircuitView *view, QMouseEvent *event);
     bool mousePressEvent(CircuitView *view, QMouseEvent *event);
     bool mouseReleaseEvent(CircuitView *view, QMouseEvent *event);

@@ -15,6 +15,9 @@
 #include "circuit_tools/circuitselecttool.h"
 #include "circuit_tools/circuitwiringtool.h"
 
+#include "../../core/operations/circuit/componentorientoperation.h"
+#include "../../core/operations/circuit/removecomponentoperation.h"
+
 class CircuitView;
 
 class CircuitViewController : public Controller
@@ -48,6 +51,7 @@ public slots:
     void setActiveTool(CircuitTool *tool);
 
     void deleteSelected(CircuitView *view);
+    void orientSelected(CircuitView *view, CircuitComponent::Orientation orientation);
 };
 
 #endif // CIRCUITVIEWCONTROLLER_H

@@ -67,6 +67,9 @@ void CircuitSelectTool::componentMoveDragEvent(CircuitView *view, QMouseEvent *e
 
 void CircuitSelectTool::componentMoveEndEvent(CircuitView *view, QMouseEvent *event)
 {
+    if (anchorDeltaRounded().length() == 0)
+        return;
+
     foreach (CircuitComponent *component, view->circuit()->selectedComponents()) {
         component->setPosition(component->markedPosition(), false);
     }
@@ -77,35 +80,6 @@ void CircuitSelectTool::componentMoveEndEvent(CircuitView *view, QMouseEvent *ev
 void CircuitSelectTool::componentPressEvent(CircuitView *view, CircuitComponent *component, QMouseEvent *event)
 {
 
-}
-
-bool CircuitSelectTool::keyPressEvent(CircuitView *view, QKeyEvent *event)
-{
-    CircuitComponent::Orientation orientation;
-
-    switch(event->key()) {
-        case Qt::Key_Up:
-            orientation = CircuitComponent::North;
-            break;
-        case Qt::Key_Down:
-            orientation = CircuitComponent::South;
-            break;
-        case Qt::Key_Left:
-            orientation = CircuitComponent::West;
-            break;
-        case Qt::Key_Right:
-            orientation = CircuitComponent::East;
-            break;
-        default:
-            return false;
-    }
-
-    view->setUpdatesEnabled(false);
-    foreach (CircuitComponent *component, view->circuit()->selectedComponents())
-        component->setOrientation(orientation);
-    view->setUpdatesEnabled(true);
-
-    return true;
 }
 
 bool CircuitSelectTool::mouseMoveEvent(CircuitView *view, QMouseEvent *event)

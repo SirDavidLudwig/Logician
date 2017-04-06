@@ -26,58 +26,64 @@ void Circuit::setName(QString name)
 QList<CircuitComponent*> Circuit::components() { return components_; }
 QList<CircuitComponent*> Circuit::selectedComponents() { return selectedComponents_; }
 
-bool Circuit::addComponent(CircuitComponent *component)
+bool Circuit::addComponent(CircuitComponent *component, bool doUpdate)
 {
     if (!components_.contains(component)) {
         components_.append(component);
         connect(component, SIGNAL(updated()), this, SLOT(update()));
-        update();
+
+        if (doUpdate)
+            update();
+
         return true;
     }
     return false;
 }
 
-bool Circuit::removeComponent(CircuitComponent *component)
+bool Circuit::removeComponent(CircuitComponent *component, bool doUpdate)
 {
     if (components_.removeOne(component)) {
         disconnect(component, SIGNAL(updated()), this, SLOT(update()));
-        update();
+
+        if (doUpdate)
+            update();
+
         return true;
     }
     return false;
 }
 
-void Circuit::selectAll(bool repaint)
+void Circuit::selectAll(bool doUpdate)
 {
     foreach (CircuitComponent *component, components_) {
         selectComponent(component);
     }
 
-    if (repaint)
+    if (doUpdate)
         emit updated();
 }
 
-void Circuit::deselectAll(bool repaint)
+void Circuit::deselectAll(bool doUpdate)
 {
     foreach (CircuitComponent *component, selectedComponents())
         component->setSelected(false);
     selectedComponents_.clear();
 
-    if (repaint)
+    if (doUpdate)
         emit updated();
 }
 
-void Circuit::selectComponent(CircuitComponent *component, bool repaint)
+void Circuit::selectComponent(CircuitComponent *component, bool doUpdate)
 {
     if (!selectedComponents_.contains(component)) {
         component->setSelected(true);
         selectedComponents_.append(component);
     }
-    if (repaint)
+    if (doUpdate)
         emit updated();
 }
 
-void Circuit::deselectComponent(CircuitComponent *component, bool repaint)
+void Circuit::deselectComponent(CircuitComponent *component, bool doUpdate)
 {
     component->setSelected(false);
 
@@ -85,27 +91,19 @@ void Circuit::deselectComponent(CircuitComponent *component, bool repaint)
         selectedComponents_.removeOne(component);
     }
 
-    if (repaint)
+    if (doUpdate)
         emit updated();
 }
 
-void Circuit::toggleSelectComponent(CircuitComponent *component, bool repaint)
+void Circuit::toggleSelectComponent(CircuitComponent *component, bool doUpdate)
 {
     if (component->isSelected())
         deselectComponent(component, false);
     else
         selectComponent(component, false);
 
-    if (repaint)
+    if (doUpdate)
         emit updated();
-}
-
-void Circuit::deleteSelected()
-{
-    foreach (CircuitComponent *component, selectedComponents_) {
-        removeComponent(component);
-    }
-    selectedComponents_.clear();
 }
 
 bool Circuit::undoOperation()
