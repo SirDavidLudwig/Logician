@@ -5,18 +5,18 @@
 #include <QList>
 #include <QVector2D>
 
-#include "../operation.h"
+#include "circuitoperation.h"
 #include "../../../circuits/circuit.h"
 #include "../../../circuits/circuitcomponent.h"
 
-class ComponentOrientOperation : public Operation
+class ComponentOrientOperation : public CircuitOperation
 {
 public:
     ComponentOrientOperation(CircuitComponent *component, CircuitComponent::Orientation orientation);
     ComponentOrientOperation(QList<CircuitComponent*> componentList, CircuitComponent::Orientation orientation);
 
-    void revert(Circuit *circuit);
     void execute(Circuit *circuit);
+    void revert(Circuit *circuit);
 
 private:
     QList<CircuitComponent*> components_;

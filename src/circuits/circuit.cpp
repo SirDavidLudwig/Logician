@@ -106,9 +106,25 @@ void Circuit::toggleSelectComponent(CircuitComponent *component, bool doUpdate)
         emit updated();
 }
 
+void Circuit::setSelectedComponents(QList<CircuitComponent*> components, bool doUpdate)
+{
+    CircuitComponent *component;
+
+    foreach (component, selectedComponents_)
+        component->setSelected(false);
+
+    selectedComponents_ = components;
+
+    foreach (component, selectedComponents_)
+        component->setSelected(true);
+
+    if (doUpdate)
+        emit updated();
+}
+
 bool Circuit::undoOperation()
 {
-    Operation *operation = undoRedoStack_->undo();
+    CircuitOperation *operation = (CircuitOperation*) undoRedoStack_->undo();
     if (operation == nullptr)
         return false;
 
@@ -119,7 +135,7 @@ bool Circuit::undoOperation()
 
 bool Circuit::redoOperation()
 {
-    Operation *operation = undoRedoStack_->redo();
+    CircuitOperation *operation = (CircuitOperation*) undoRedoStack_->redo();
     if (operation == nullptr)
         return false;
 
@@ -128,7 +144,7 @@ bool Circuit::redoOperation()
     return true;
 }
 
-void Circuit::executeOperation(Operation *operation)
+void Circuit::executeOperation(CircuitOperation *operation)
 {
     operation->execute(this);
     undoRedoStack_->push(operation);

@@ -23,7 +23,6 @@ void Application::styleApp()
     setStyleSheet(QString(styles.readAll()));
 
     styles.close();
-
 }
 
 MainWindow* Application::mainWindow() { return mainWindow_; }

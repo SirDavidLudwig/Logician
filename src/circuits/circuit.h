@@ -6,6 +6,7 @@
 
 #include "../core/operations/undoredostack.h"
 #include "../core/operations/operation.h"
+#include "../core/operations/circuit/circuitoperation.h"
 
 #include "circuitcomponent.h"
 
@@ -51,13 +52,14 @@ public slots:
     void selectAll(bool update = true);
     void deselectAll(bool update = true);
 
-    void selectComponent(CircuitComponent *component, bool update = true);
-    void deselectComponent(CircuitComponent *component, bool update = true);
-    void toggleSelectComponent(CircuitComponent *component, bool update = true);
+    void selectComponent(CircuitComponent *component, bool doUpdate = true);
+    void deselectComponent(CircuitComponent *component, bool doUpdate = true);
+    void toggleSelectComponent(CircuitComponent *component, bool doUpdate = true);
+    void setSelectedComponents(QList<CircuitComponent*> components, bool doUpdate = true);
 
     bool redoOperation();
     bool undoOperation();
-    void executeOperation(Operation *operation);
+    void executeOperation(CircuitOperation *operation);
 
     void update();
 };
