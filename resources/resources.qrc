@@ -16,5 +16,6 @@
         <file>png/3_way_switch_right.png</file>
         <file>svg/3_way_switch_right.svg</file>
         <file>svg/resistor.svg</file>
+        <file>lang/English.lang</file>
     </qresource>
 </RCC>

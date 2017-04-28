@@ -41,7 +41,8 @@ HEADERS += \
     src/core/operations/circuit/removecomponentoperation.h \
     src/core/operations/circuit/componentorientoperation.h \
     src/core/operations/circuit/addcomponentoperation.h \
-    src/core/operations/circuit/circuitoperation.h
+    src/core/operations/circuit/circuitoperation.h \
+    src/core/locale.h
 
 SOURCES += \
     src/main.cpp \
@@ -82,7 +83,8 @@ SOURCES += \
     src/core/operations/circuit/removecomponentoperation.cpp \
     src/core/operations/circuit/componentorientoperation.cpp \
     src/core/operations/circuit/addcomponentoperation.cpp \
-    src/core/operations/circuit/circuitoperation.cpp
+    src/core/operations/circuit/circuitoperation.cpp \
+    src/core/locale.cpp
 
 RESOURCES += \
     resources/resources.qrc

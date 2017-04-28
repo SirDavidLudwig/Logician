@@ -9,8 +9,13 @@ Application::Application(int argc, char *argv[]) :
     // Save an instance of the app
     Application::instance_ = this;
 
+    // Set the app's language
+    Locale::setLanguage(QLocale::English);
+
+    // Make the app pretty
     styleApp();
 
+    // Make and show the main window
     mainWindow_ = new MainWindow();
     mainWindow_->showMaximized();
 }

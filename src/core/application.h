@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QUrl>
 
+#include "locale.h"
 #include "../gui/mainwindow.h"
 
 
