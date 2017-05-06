@@ -11,13 +11,18 @@ void ActionManager::createActions()
     addAction(About,            "action.about");
     addAction(CloseAllCircuits, "action.circuit_close_all");
     addAction(CloseCircuit,     "action.circuit_close",     QKeySequence(QKeySequence::Close));
+    addAction(CloseWindow,      "action.window_close");
     addAction(Copy,             "action.copy",              QKeySequence(QKeySequence::Copy));
     addAction(Cut,              "action.cut",               QKeySequence(QKeySequence::Cut));
     addAction(Delete,           "action.delete",            QKeySequence(QKeySequence::Delete));
     addAction(Exit,             "action.exit",              QKeySequence(QKeySequence::Quit));
+    addAction(Export,           "action.export");
+    addAction(Import,           "action.import");
     addAction(NewProject,       "action.project_new",       QKeySequence(QKeySequence::New));
+    addAction(NewWindow,        "action.window_new");
     addAction(OpenProject,      "action.project_open",      QKeySequence(QKeySequence::Open));
     addAction(Paste,            "action.paste",             QKeySequence(QKeySequence::Paste));
+    addAction(Preferences,      "action.preferences");
     addAction(Redo,             "action.redo",              QKeySequence("Ctrl+Shift+Z"),      Disabled);
     addAction(Save,             "action.save",              QKeySequence(QKeySequence::Save));
     addAction(SaveAll,          "action.save_all");

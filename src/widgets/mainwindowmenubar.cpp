@@ -25,6 +25,15 @@ void MainWindowMenuBar::addFileActions()
 
     menu->addSeparator();
 
+    menu->addAction(actionManager_->get(ActionManager::Preferences));
+
+    menu->addSeparator();
+
+    menu->addAction(actionManager_->get(ActionManager::Import));
+    menu->addAction(actionManager_->get(ActionManager::Export));
+
+    menu->addSeparator();
+
     menu->addAction(actionManager_->get(ActionManager::CloseCircuit));
     menu->addAction(actionManager_->get(ActionManager::RevertCircuit));
     menu->addAction(actionManager_->get(ActionManager::CloseAllCircuits));
@@ -54,6 +63,8 @@ void MainWindowMenuBar::addToolsActions()
 void MainWindowMenuBar::addWindowActions()
 {
     QMenu *menu = addMenu(Locale::get("menu.window"));
+    menu->addAction(actionManager_->get(ActionManager::NewWindow));
+    menu->addAction(actionManager_->get(ActionManager::CloseWindow));
 }
 
 void MainWindowMenuBar::addHelpActions()

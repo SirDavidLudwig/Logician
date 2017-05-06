@@ -6,7 +6,10 @@ action.copy               = Copy
 action.cut                = Cut
 action.delete			  = Delete
 action.exit               = Exit
+action.import             = Import...
+action.export             = Export...
 action.paste			  = Paste
+action.preferences        = Preferences
 action.project_new        = New Project
 action.project_open		  = Open Project
 action.redo				  = Redo
@@ -15,6 +18,8 @@ action.save_all           = Save All
 action.save_as            = Save As...
 action.show_grid          = Show Grid
 action.undo               = Undo
+action.window_new         = New Window
+action.window_close       = Close Window
 
 action.show_grid = Show Grid
 

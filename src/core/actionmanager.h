@@ -16,13 +16,18 @@ public:
         About,
         CloseAllCircuits,
         CloseCircuit,
+        CloseWindow,
         Copy,
         Cut,
         Delete,
         Exit,
+        Export,
+        Import,
         NewProject,
+        NewWindow,
         OpenProject,
         Paste,
+        Preferences,
         Redo,
         RevertCircuit,
         Save,
@@ -30,6 +35,7 @@ public:
         SaveAs,
         ShowGrid,
         Undo
+
     };
 
     enum Flags {
