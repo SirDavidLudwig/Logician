@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QCloseEvent>
 #include <QDockWidget>
 #include <QMainWindow>
 
@@ -8,7 +9,7 @@
 #include "../widgets/assetbrowser.h"
 #include "../widgets/mainwindowmenubar.h"
 #include "../widgets/mainwindowtoolbar.h"
-#include "../widgets/mainwindowui.h"
+#include "../widgets/mainwindowcircuitview.h"
 
 class MainWindow : public QMainWindow
 {
@@ -18,13 +19,17 @@ public:
 
     void setCircuitViewController(CircuitViewController *controller);
 
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     AssetBrowser *browser_;
     MainWindowMenuBar *menuBar_;
     MainWindowToolBar *toolBar_;
-    MainWindowUi *ui_;
+    MainWindowCircuitView *ui_;
 
 signals:
+    void closed(MainWindow*);
 
 public slots:
 };

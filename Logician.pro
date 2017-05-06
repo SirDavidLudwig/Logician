@@ -21,7 +21,6 @@ HEADERS += \
     src/widgets/circuitview.h \
     src/widgets/mainwindowmenubar.h \
     src/widgets/mainwindowtoolbar.h \
-    src/widgets/mainwindowui.h \
 	src/controllers/controller.h \
 	src/controllers/circuit_view/circuitviewcontroller.h \
 	src/controllers/circuit_view/circuit_tools/circuittool.h \
@@ -42,7 +41,10 @@ HEADERS += \
     src/core/operations/circuit/componentorientoperation.h \
     src/core/operations/circuit/addcomponentoperation.h \
     src/core/operations/circuit/circuitoperation.h \
-    src/core/locale.h
+    src/core/locale.h \
+    src/widgets/mainwindowcircuitview.h \
+    src/core/actionmanager.h \
+    src/core/windowmanager.h
 
 SOURCES += \
     src/main.cpp \
@@ -63,7 +65,6 @@ SOURCES += \
     src/widgets/circuitview.cpp \
     src/widgets/mainwindowmenubar.cpp \
     src/widgets/mainwindowtoolbar.cpp \
-    src/widgets/mainwindowui.cpp \
 	src/controllers/controller.cpp \
 	src/controllers/circuit_view/circuitviewcontroller.cpp \
 	src/controllers/circuit_view/circuit_tools/circuittool.cpp \
@@ -84,7 +85,10 @@ SOURCES += \
     src/core/operations/circuit/componentorientoperation.cpp \
     src/core/operations/circuit/addcomponentoperation.cpp \
     src/core/operations/circuit/circuitoperation.cpp \
-    src/core/locale.cpp
+    src/core/locale.cpp \
+    src/widgets/mainwindowcircuitview.cpp \
+    src/core/actionmanager.cpp \
+    src/core/windowmanager.cpp
 
 RESOURCES += \
     resources/resources.qrc

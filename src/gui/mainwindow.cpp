@@ -12,11 +12,17 @@ MainWindow::MainWindow(QWidget *parent) :
     menuBar_ = new MainWindowMenuBar(this);
     setMenuBar(menuBar_);
 
-    ui_ = new MainWindowUi(this);
+    ui_ = new MainWindowCircuitView(this);
     ui_->setController(new CircuitViewController());
     setCentralWidget(ui_);
 
     ui_->addCircuit(new Circuit("My circuit"));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    event->accept();
+    emit closed(this);
 }
 
 void MainWindow::setCircuitViewController(CircuitViewController *controller)

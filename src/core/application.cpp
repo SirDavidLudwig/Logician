@@ -1,5 +1,6 @@
 #include "application.h"
 
+// Store the application instance
 Application* Application::instance_ = nullptr;
 Application* Application::instance() { return Application::instance_; }
 
@@ -12,12 +13,17 @@ Application::Application(int argc, char *argv[]) :
     // Set the app's language
     Locale::setLanguage(QLocale::English);
 
+    // Create the action manager
+    actionManager_ = new ActionManager(this);
+
+    // Create the window manager
+    windowManager_ = new WindowManager(this);
+
     // Make the app pretty
     styleApp();
 
     // Make and show the main window
-    mainWindow_ = new MainWindow();
-    mainWindow_->showMaximized();
+    windowManager_->newWindow()->showMaximized();
 }
 
 void Application::styleApp()
@@ -30,4 +36,5 @@ void Application::styleApp()
     styles.close();
 }
 
-MainWindow* Application::mainWindow() { return mainWindow_; }
+ActionManager* Application::actionManager() { return actionManager_; }
+WindowManager* Application::windowManager() { return windowManager_; }

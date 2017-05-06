@@ -8,11 +8,11 @@
 
 class MainWindow;
 
-class MainWindowUi : public QTabWidget
+class MainWindowCircuitView : public QTabWidget
 {
     Q_OBJECT
 public:
-    MainWindowUi(QWidget *parent = 0);
+    MainWindowCircuitView(QWidget *parent = 0);
 
     void setController(CircuitViewController *controller);
 

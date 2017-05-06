@@ -5,6 +5,7 @@
 #include <QMenuBar>
 #include <QWidget>
 
+#include "../core/actionmanager.h"
 #include "../core/locale.h"
 
 class MainWindowMenuBar : public QMenuBar
@@ -13,10 +14,6 @@ class MainWindowMenuBar : public QMenuBar
 public:
 
     MainWindowMenuBar(QWidget *parent);
-
-    void addAction(QString menu, QAction *action, QKeySequence shortcut = 0);
-    void addMenu(QString label);
-    void addSeparator(QString menu);
 
 protected:
     void style();
@@ -29,7 +26,7 @@ protected:
     void addHelpActions();
 
 private:
-    QMap<QString, QMenu*> menus_;
+    ActionManager *actionManager_;
 
 signals:
 

@@ -1,14 +1,10 @@
 #include "mainwindowmenubar.h"
+#include "../core/application.h"
 
 MainWindowMenuBar::MainWindowMenuBar(QWidget *parent) :
     QMenuBar(parent)
 {
-    addMenu("File");
-    addMenu("Edit");
-    addMenu("View");
-    addMenu("Tools");
-    addMenu("Window");
-    addMenu("Help");
+    actionManager_ = Application::instance()->actionManager();
 
     addFileActions();
     addEditActions();
@@ -18,68 +14,50 @@ MainWindowMenuBar::MainWindowMenuBar(QWidget *parent) :
     addHelpActions();
 }
 
-void MainWindowMenuBar::addAction(QString menu, QAction *action, QKeySequence shortcut)
-{
-    if (shortcut != 0)
-        action->setShortcut(shortcut);
-    menus_.value(menu)->addAction(action);
-}
-
-void MainWindowMenuBar::addMenu(QString label)
-{
-    QMenu* menu = QMenuBar::addMenu(label);
-    menus_.insert(menu->title(), menu);
-}
-
-void MainWindowMenuBar::addSeparator(QString menu)
-{
-    menus_.value(menu)->addSeparator();
-}
-
 void MainWindowMenuBar::addFileActions()
 {
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.new_project"), parent()), QKeySequence(QKeySequence::New));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.open_project"), parent()), QKeySequence(QKeySequence::Open));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.save"), parent()), QKeySequence(QKeySequence::Save));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.save_as"), parent()), QKeySequence("Ctrl+Shift+S"));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.save_all"), parent()));
-    addSeparator("File");
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.close_circuit"), parent()), QKeySequence(QKeySequence::Close));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.revert_circuit"), parent()));
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.close_all_circuits"), parent()));
-    addSeparator("File");
-    addAction("File", new QAction(Locale::get("mainwindow.menu.file.exit"), parent()), QKeySequence(QKeySequence::Quit));
+    QMenu *menu = addMenu(Locale::get("menu.file"));
+    menu->addAction(actionManager_->get(ActionManager::NewProject));
+    menu->addAction(actionManager_->get(ActionManager::OpenProject));
+    menu->addAction(actionManager_->get(ActionManager::Save));
+    menu->addAction(actionManager_->get(ActionManager::SaveAs));
+    menu->addAction(actionManager_->get(ActionManager::SaveAll));
 
+    menu->addSeparator();
+
+    menu->addAction(actionManager_->get(ActionManager::CloseCircuit));
+    menu->addAction(actionManager_->get(ActionManager::RevertCircuit));
+    menu->addAction(actionManager_->get(ActionManager::CloseAllCircuits));
+
+    menu->addSeparator();
+
+    menu->addAction(actionManager_->get(ActionManager::Exit));
 }
 
 void MainWindowMenuBar::addEditActions()
 {
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.undo"), parent()), QKeySequence(QKeySequence::Undo));
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.redo"), parent()), QKeySequence("Ctrl+Shift+Z"));
-    addSeparator("Edit");
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.copy"), parent()), QKeySequence(QKeySequence::Save));
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.cut"), parent()), QKeySequence("Ctrl+Shift+S"));
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.paste"), parent()));
-    addSeparator("Edit");
-    addAction("Edit", new QAction(Locale::get("mainwindow.menu.edit.delete"), parent()), QKeySequence(QKeySequence::Close));
+    QMenu *menu = addMenu(Locale::get("menu.edit"));
+    menu->addAction(actionManager_->get(ActionManager::Undo));
+    menu->addAction(actionManager_->get(ActionManager::Redo));
 }
 
 void MainWindowMenuBar::addViewActions()
 {
-    addAction("View", new QAction(Locale::get("mainwindow.menu.view.show_grid"), parent()));
+    QMenu *menu = addMenu(Locale::get("menu.view"));
 }
 
 void MainWindowMenuBar::addToolsActions()
 {
-
+    QMenu *menu = addMenu(Locale::get("menu.tools"));
 }
 
 void MainWindowMenuBar::addWindowActions()
 {
-
+    QMenu *menu = addMenu(Locale::get("menu.window"));
 }
 
 void MainWindowMenuBar::addHelpActions()
 {
-    addAction("Help", new QAction("About", parent()));
+    QMenu *menu = addMenu(Locale::get("menu.help"));
+    menu->addAction(actionManager_->get(ActionManager::About));
 }

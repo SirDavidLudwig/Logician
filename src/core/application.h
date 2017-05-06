@@ -8,7 +8,9 @@
 #include <QObject>
 #include <QUrl>
 
+#include "actionmanager.h"
 #include "locale.h"
+#include "windowmanager.h"
 #include "../gui/mainwindow.h"
 
 
@@ -19,11 +21,14 @@ public:
 
     Application(int argc, char *argv[]);
 
-    MainWindow* mainWindow();
+    ActionManager *actionManager();
+    WindowManager* windowManager();
+
 
 private:
     static Application* instance_;
-    MainWindow *mainWindow_;
+    ActionManager *actionManager_;
+    WindowManager *windowManager_;
 
 public slots:
     void styleApp();
